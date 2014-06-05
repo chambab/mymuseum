@@ -1,5 +1,6 @@
 
 
+
 CREATE TABLE CDCTCINFO
 (
 	INFO_ID               CHAR(18)  NOT NULL ,
