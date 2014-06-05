@@ -1,0 +1,310 @@
+<?xml version="1.0"	encoding="euc-kr"?>	
+<!-- environment initialization	-->	
+<project name="mymuseum"	default="start" basedir=".">	
+	<target	name="init">
+		<property name="targetSvr" value="www.connectsoft.co.kr"/>
+		<property name="userid" value="root"/>
+		<property name="passwd" value="speed011"/>
+		<property name="home-drive" value="d"/>
+		<property name="project-home" value="${home-drive}:/02.Dev/eclipse/workspace/i4on"/>
+		<!-- property name="ntis-home" value="${project-home}/NTIS"/>
+		<property name="work-home" value="${ntis-home}/ntis"/>
+		<property name="ejb-home" value="${work-home}/ejb"/>		
+		<property name="vol-home" value="${work-home}/vol"/ -->
+		<property name="web-home" value="${project-home}/webapp"/>
+		<property name="class-home" value="${web-home}/WEB-INF/classes"/>
+		<property name="remote-home" value="/var/mymuseum/mymuseum/www"/>
+	</target>
+	
+	<property name="lib" value="${web-home}/WEB-INF/lib"/>
+	
+	<path id="project.classpath">
+		<fileset dir="${lib}">
+			<include name="commons-net-2.0.jar"/>
+		</fileset>
+	</path>
+	
+<!-- ftp_jar hidden ftp_img -->
+	<!-- target	name="start" depends="ftp_jar_lib, ftp_class, ftp_env, ftp_config,ftp_xrw, ftp_jsp,ftp_js,ftp_css, ftp_mb"/ -->
+	<target	name="start" depends="ftp_jar_lib, ftp_class, ftp_config"/>	
+	
+	<target	name="ftp_jar_lib" depends="init">
+		<ftp server="${targetSvr}"				
+			port="21"
+			remotedir="${remote-home}/WEB-INF/lib"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">			
+			<fileset dir="${web-home}/WEB-INF/lib">
+				<include name="**/*.jar"/>				
+			</fileset>			
+		</ftp>		
+		<echo message="[LIB_JAR] files Copy 완료(${targetSvr})"/>
+		
+	</target>
+	
+	<target	name="ftp_class" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/WEB-INF/classes"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${class-home}">
+				<include name="**/*.class"/>					
+			</fileset>		
+		</ftp>
+		<echo message="[CLASS] files Copy 완료(${targetSvr})"/>
+	</target>
+	
+	<target	name="ftp_jsp" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="home/**/*.jsp"/>
+				<include name="inc/**/*.jsp"/>
+				<include name="jsp/**/*.jsp"/>
+				<include name="lib/**/*.lib"/>
+				<include name="jsp/**/*.css"/>
+				<include name="jsp/**/*.jsp"/>	
+				<include name="jsp/**/*.js"/>
+				<include name="*.html"/>
+				<include name="*.jsp"/>
+				<!-- include name="*.jsp"/ -->
+			</fileset>
+		</ftp>
+		<echo message="[JSP] files Copy 완료(${targetSvr})"/>
+	</target>
+	
+	<target	name="ftp_picture_jsp" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="jsp/picture/**/*.jsp"/>
+			</fileset>
+		</ftp>
+		<echo message="[JSP] files Copy 완료(${targetSvr})"/>
+	</target>	
+
+	
+	<target	name="ftp_login_jsp" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="jsp/logcheck.jsp"/>
+			</fileset>
+		</ftp>
+		<echo message="[JSP] files Copy 완료(${targetSvr})"/>
+	</target>
+	
+	
+	<target	name="ftp_script" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="js/**/*.js"/>			
+			</fileset>
+		</ftp>
+		<echo message="[JavaScript] files Copy 완료(${targetSvr})"/>
+	</target>
+	
+	<target	name="ftp_image" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="img/**/*.gif"/>
+				<include name="img/**/*.jpg"/>
+			</fileset>
+		</ftp>
+		<echo message="[JavaScript] files Copy 완료(${targetSvr})"/>
+	</target>	
+	
+	
+	<target	name="ftp_config" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/WEB-INF"
+			userid="${userid}"
+			password="${passwd}"
+			binary="no">
+			<fileset dir="${web-home}/WEB-INF">
+				<include name="properties/*"/>
+				<include name="config/**/*.xml"/>
+				<include name="*.xml"/>				
+			</fileset>
+		</ftp>
+		<echo message="[CONFIG] files Copy 완료(${targetSvr})"/>
+	</target>
+	<!--
+	<target	name="ftp_xrw" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/vol"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${vol-home}">
+				<include name="xrw/vol/**/*.xrw"/>
+				<include name="rex/vol/**/*.rex"/>
+			</fileset>
+		</ftp>
+		<echo message="[XRW, REX] files Copy 완료(${targetSvr})"/>
+	</target>
+	<target	name="ftp_xrw_vtm" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/webapp"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="xrw/vol/vtm/**/*.xrw"/>
+			</fileset>
+		</ftp>
+		<echo message="[XRW_VTM] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_xrw_vcm" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/webapp"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="xrw/vol/vcm/**/*.xrw"/>
+			</fileset>
+		</ftp>
+		<echo message="[XRW_VCM] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_xrw_sym" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/webapp"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="xrw/vol/sym/**/*.xrw"/>
+			</fileset>
+		</ftp>
+		<echo message="[XRW_SYM] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_xrw_cmm" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/webapp"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="xrw/vol/cmm/**/*.xrw"/>
+			</fileset>
+		</ftp>
+		<echo message="[XRW_CMM] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_jsp" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/vol"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${vol-home}">
+				<include name="jsp/vol/**/*.jsp"/>
+				<include name="vol/**/*.jsp"/>
+				<include name="vol/**/*.html"/>
+			</fileset>
+		</ftp>
+		<echo message="[JSP] files Copy 완료(${targetSvr})"/>
+	</target>
+	<target	name="ftp_img" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/webapp"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${web-home}">
+				<include name="img/vol/**/*.gif"/>
+				<include name="img/vol/**/*.swf"/>
+			</fileset>
+		</ftp>
+		<echo message="[IMG] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_config" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/vol"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${vol-home}">
+				<include name="WEB-INF/config/ntis-config_vol.xml"/>
+				<include name="WEB-INF/tiles/tiles-vol-defs.xml"/>
+			</fileset>
+		</ftp>
+		<echo message="[CONFIG, TILES] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_js" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/vol/js/vol"
+			userid="${userid}"
+			password="${passwd}"
+			binary="no">
+			<fileset dir="${vol-home}/js/vol">
+				<include name="**/*.js"/>
+			</fileset>
+		</ftp>
+		<echo message="[JAVASCRIPT] files Copy 완료(${targetSvr})"/>
+	</target>
+	<target	name="ftp_css" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="${remote-home}/vol/js/vol"
+			userid="${userid}"
+			password="${passwd}"
+			binary="no">
+			<fileset dir="${vol-home}/css/vol">
+				<include name="**/*.css"/>
+			</fileset>
+		</ftp>
+		<echo message="[CSS] files Copy 완료(${targetSvr})"/>
+	</target>	
+	<target	name="ftp_mb" depends="init">
+		<ftp server="${targetSvr}"
+			port="21"
+			remotedir="/backup/util/systemier/MessageBroker/work/classes/com/fff/mb"
+			userid="${userid}"
+			password="${passwd}"
+			binary="yes">
+			<fileset dir="${project-home}/UIMapper/work/classes/com/fff/mb">
+				<include name="vol*/*.class"/>
+				<include name="ntv*/*.class"/>
+				<include name="cofnn*/*.class"/>
+			</fileset>
+		</ftp>
+		<echo message="[MB CLASS] files Copy 완료(${targetSvr})"/>
+	</target>
+	-->
+</project>

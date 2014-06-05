@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryservice>
+	<queries>
+		<!-- ============================== 공통코드MST 관련 ============================= -->
+		<!-- 공통코드MST 목록 -->
+		<query id="COCOCdCode.selectMstCodeList" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT A.GRP_CD
+					  ,A.GRP_NM_KO
+					  ,A.GRP_NM_EN
+					  ,A.USR_DEF_DESC
+					  ,DECODE(A.ADJ_ACPT_YN, 'Y', 'true', 'N', 'false') ADJ_ACPT_YN
+					  ,A.ADJ_ACPT_ORG_CD
+					  ,B.JOJIK_KNAME ADJ_ACPT_ORG_NM
+					  ,A.MNG_ORG_CD
+					  ,C.JOJIK_KNAME MNG_ORG_NM
+					  ,A.CD_LEN
+					  ,DECODE(A.AUTO_GEN_CD_YN, 'Y', 'true', 'N', 'false') AUTO_GEN_CD_YN
+					  ,A.SUB_BIZ_TYPE
+					  ,A.USR_DEF_NAME1
+					  ,A.USR_DEF_NAME2
+					  ,A.USR_DEF_NAME3
+					  ,A.USR_DEF_NAME4
+					  ,A.USR_DEF_NAME5
+					  ,A.USR_DEF_NAME6
+					  ,A.USR_DEF_NAME7
+					  ,A.USR_DEF_NAME8
+					  ,A.USR_DEF_NAME9
+					  ,A.USR_DEF_NAME10
+					  ,DECODE(A.USE_YN, 'N', 'true', 'Y', 'false') USE_YN
+					  ,A.GRP_CD OLD_GRP_CD
+					  ,A.REG_DT
+					  ,A.UPD_DT
+					  ,A.REG_ID
+					  ,A.UPD_ID
+					  ,A.UPD_IP
+				#if ($GV_LANG_CD.trim().length()>0)
+					  ,A.GRP_NM_{{GV_LANG_CD}} GRP_NM
+				#end
+				  FROM COCO_COMCD_M A
+				      ,COCO_JOJIK_M B
+				      ,COCO_JOJIK_M C
+				 WHERE A.ADJ_ACPT_ORG_CD=B.JOJIK_CD(+)
+				   AND A.MNG_ORG_CD=C.JOJIK_CD(+)
+				#if ($GRP_CD.trim().length()>0)
+				   AND A.GRP_CD LIKE :GRP_CD || '%'
+				#end
+				#if ($GRP_NM.trim().length()>0)
+				   AND (A.GRP_NM_KO LIKE '%' || :GRP_NM || '%'
+				   	    OR A.GRP_NM_EN LIKE '%' || :GRP_NM || '%' )
+				#end
+				#if ($USE_YN.trim().length()>0)
+				   AND A.USE_YN=:USE_YN
+				#end
+				#if ($SUB_BIZ_TYPE.trim().length()>0)
+				   AND A.SUB_BIZ_TYPE LIKE :SUB_BIZ_TYPE || '%'
+				#end
+			  ORDER BY GRP_NM_KO
+			          ,GRP_CD
+			]]></statement>
+		</query>
+		
+		<!-- 공통코드마스터 등록 -->
+		<query id="COCOCdCode.insertMstCode" mappingStyle="upper" isDynamic="true">
+			<statement>
+				INSERT INTO COCO_COMCD_M
+				           (GRP_CD
+				           ,GRP_NM_KO
+				           ,GRP_NM_EN
+				           ,USR_DEF_DESC
+						   ,ADJ_ACPT_YN
+						   ,ADJ_ACPT_ORG_CD
+						   ,MNG_ORG_CD
+						   ,CD_LEN
+						   ,AUTO_GEN_CD_YN
+						   ,SUB_BIZ_TYPE
+						   ,USR_DEF_NAME1
+						   ,USR_DEF_NAME2
+						   ,USR_DEF_NAME3
+						   ,USR_DEF_NAME4
+						   ,USR_DEF_NAME5
+						   ,USR_DEF_NAME6
+						   ,USR_DEF_NAME7
+						   ,USR_DEF_NAME8
+						   ,USR_DEF_NAME9
+						   ,USR_DEF_NAME10
+				           ,USE_YN
+				           ,REG_DT
+				           ,UPD_DT
+				           ,REG_ID
+				           ,UPD_ID
+				           ,UPD_IP)
+				     VALUES 
+				           (:GRP_CD
+				           ,:GRP_NM_KO
+				           ,:GRP_NM_EN
+				           ,:USR_DEF_DESC
+						   ,NVL(DECODE(:ADJ_ACPT_YN,'true','Y','false','N',:ADJ_ACPT_YN),'N')
+						   ,:ADJ_ACPT_ORG_CD
+						   ,:MNG_ORG_CD
+						   ,:CD_LEN
+						   ,NVL(DECODE(:AUTO_GEN_CD_YN,'true','Y','false','N',:AUTO_GEN_CD_YN),'Y')
+						   ,:SUB_BIZ_TYPE
+						   ,:USR_DEF_NAME1
+						   ,:USR_DEF_NAME2
+						   ,:USR_DEF_NAME3
+						   ,:USR_DEF_NAME4
+						   ,:USR_DEF_NAME5
+						   ,:USR_DEF_NAME6
+						   ,:USR_DEF_NAME7
+						   ,:USR_DEF_NAME8
+						   ,:USR_DEF_NAME9
+						   ,:USR_DEF_NAME10
+				           ,NVL(DECODE(:USE_YN,'true','N','false','Y',:USE_YN),'Y')
+				           ,SYSDATE
+				           ,SYSDATE
+				           ,:GV_WORKER_ID
+				           ,:GV_WORKER_ID
+				           ,:GV_IP_ADDR)
+			</statement>
+		</query>
+		
+		<!-- 공통코드마스터 수정 -->
+		<query id="COCOCdCode.updateMstCode" mappingStyle="upper" isDynamic="true">
+			<statement>
+				UPDATE COCO_COMCD_M
+				   SET GRP_CD=:GRP_CD
+				      ,GRP_NM_KO=:GRP_NM_KO			      
+			          ,GRP_NM_EN=:GRP_NM_EN
+			          ,USR_DEF_DESC=:USR_DEF_DESC
+			          ,ADJ_ACPT_YN=DECODE(:ADJ_ACPT_YN,'true','Y','false','N',:ADJ_ACPT_YN)
+					  ,ADJ_ACPT_ORG_CD=:ADJ_ACPT_ORG_CD
+					  ,MNG_ORG_CD=:MNG_ORG_CD
+					  ,CD_LEN=:CD_LEN
+					  ,AUTO_GEN_CD_YN=DECODE(:AUTO_GEN_CD_YN,'true','Y','false','N',:AUTO_GEN_CD_YN)
+					  ,SUB_BIZ_TYPE=:SUB_BIZ_TYPE
+					  ,USR_DEF_NAME1=:USR_DEF_NAME1
+					  ,USR_DEF_NAME2=:USR_DEF_NAME2
+					  ,USR_DEF_NAME3=:USR_DEF_NAME3
+					  ,USR_DEF_NAME4=:USR_DEF_NAME4
+					  ,USR_DEF_NAME5=:USR_DEF_NAME5
+					  ,USR_DEF_NAME6=:USR_DEF_NAME6
+					  ,USR_DEF_NAME7=:USR_DEF_NAME7
+					  ,USR_DEF_NAME8=:USR_DEF_NAME8
+					  ,USR_DEF_NAME9=:USR_DEF_NAME9
+					  ,USR_DEF_NAME10=:USR_DEF_NAME10
+					  ,USE_YN=DECODE(:USE_YN,'true','N','false','Y',:USE_YN)
+			          ,UPD_DT=SYSDATE
+			          ,UPD_ID=:GV_WORKER_ID
+			          ,UPD_IP=:GV_IP_ADDR
+			     WHERE GRP_CD=:OLD_GRP_CD
+			</statement>
+		</query>
+		
+		<!-- 공통코드마스터 삭제 -->
+		<query id="COCOCdCode.deleteMstCode" mappingStyle="upper" isDynamic="true">
+			<statement>
+				DELETE FROM COCO_COMCD_M
+			          WHERE GRP_CD=:OLD_GRP_CD
+			</statement>
+		</query>
+		
+		<!-- ============================== 공통코드DTL 관련 ============================= -->	
+		
+			<!-- 공통코드 목록 : 코드조회용 -->
+		<query id="COCOCdCode.selectComCodeList2" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT COM_CD
+					  ,CD_NM_KO
+					  ,SHRT_NM_KO
+					  ,GRP_CD
+					  ,USE_SEQ
+					  ,USE_YN
+					  ,USR_DEF_CD1
+					  ,USR_DEF_CD2
+					  ,USR_DEF_CD3
+					  ,USR_DEF_CD4
+					  ,USR_DEF_CD5
+					  ,USR_DEF_CD6
+					  ,USR_DEF_CD7
+					  ,USR_DEF_CD8
+					  ,USR_DEF_CD9
+					  ,USR_DEF_CD10
+					  ,LVL
+					  ,RNK
+					  ,UP_GRP_CD
+					  ,UP_COM_CD
+				  FROM COCO_COMCD_D 
+				 WHERE GRP_CD = :GRP_CD			
+			  	ORDER BY COM_CD
+			
+			]]></statement>
+		</query>	
+		<!-- 공통코드 목록 : 코드조회용 -->
+		<query id="COCOCdCode.selectComCodeList" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT A.COM_CD
+					  ,A.CD_NM_{{GV_LANG_CD}} CD_NM
+					  ,A.SHRT_NM_{{GV_LANG_CD}} SHRT_NM
+					  ,A.GRP_CD
+					  ,A.USE_SEQ
+					  ,A.USE_YN
+					  ,A.USR_DEF_CD1
+					  ,A.USR_DEF_CD2
+					  ,A.USR_DEF_CD3
+					  ,A.USR_DEF_CD4
+					  ,A.USR_DEF_CD5
+					  ,A.USR_DEF_CD6
+					  ,A.USR_DEF_CD7
+					  ,A.USR_DEF_CD8
+					  ,A.USR_DEF_CD9
+					  ,A.USR_DEF_CD10
+					  ,A.LVL
+					  ,A.RNK
+					  ,A.UP_GRP_CD
+					  ,A.UP_COM_CD
+				  FROM COCO_COMCD_D A
+				 WHERE A.GRP_CD = :GRP_CD
+				#if ($USE_YN.trim().length()>0)
+				   AND A.USE_YN=:USE_YN
+				#else
+				   AND A.USE_YN='Y'
+				#end
+				#if ($COM_CD.trim().length()>0)
+				   AND A.COM_CD LIKE :COM_CD || '%'
+				#else
+					#if ($COM_CD_LT.trim().length()>0)
+					   AND A.COM_CD < :COM_CD_LT
+					#elseif ($COM_CD_LE.trim().length()>0)
+					   AND A.COM_CD <= :COM_CD_LE
+					#end
+					#if ($COM_CD_GT.trim().length()>0)
+					   AND A.COM_CD > :COM_CD_GT
+					#elseif ($COM_CD_GE.trim().length()>0)
+					   AND A.COM_CD >= :COM_CD_GE
+					#end
+					#if ($COM_CD_BW.trim().length()>0)
+					   AND A.COM_CD BETWEEN :COM_CD_BW AND :COM_CD_BW2
+					#end
+				#end
+				#if ($UP_GRP_CD.trim().length()>0)
+				   AND A.UP_GRP_CD = :UP_GRP_CD
+				#end
+				#if ($UP_COM_CD.trim().length()>0)
+				   AND A.UP_COM_CD = :UP_COM_CD
+				#end
+				#if ($USR_DEF_CD1.trim().length()>0)
+				   AND A.USR_DEF_CD1 = :USR_DEF_CD1
+				#end
+				#if ($USR_DEF_CD2.trim().length()>0)
+				   AND A.USR_DEF_CD2 = :USR_DEF_CD2
+				#end
+				#if ($USR_DEF_CD3.trim().length()>0)
+				   AND A.USR_DEF_CD3 = :USR_DEF_CD3
+				#end
+				#if ($USR_DEF_CD4.trim().length()>0)
+				   AND A.USR_DEF_CD4 = :USR_DEF_CD4
+				#end
+				#if ($USR_DEF_CD5.trim().length()>0)
+				   AND A.USR_DEF_CD5 = :USR_DEF_CD5
+				#end
+				#if ($USR_DEF_CD6.trim().length()>0)
+				   AND A.USR_DEF_CD6 = :USR_DEF_CD6
+				#end
+				#if ($USR_DEF_CD7.trim().length()>0)
+				   AND A.USR_DEF_CD7 = :USR_DEF_CD7
+				#end
+				#if ($USR_DEF_CD8.trim().length()>0)
+				   AND A.USR_DEF_CD8 = :USR_DEF_CD8
+				#end
+				#if ($USR_DEF_CD9.trim().length()>0)
+				   AND A.USR_DEF_CD9 = :USR_DEF_CD9
+				#end
+				#if ($USR_DEF_CD10.trim().length()>0)
+				   AND A.USR_DEF_CD10 = :USR_DEF_CD10
+				#end
+			#if ($ORDER_BY.equals('CODE'))
+			  ORDER BY COM_CD
+			#elseif ($ORDER_BY.equals('NAME'))
+			  ORDER BY CD_NM
+			#else
+			  ORDER BY LVL
+			          ,RNK
+			          ,USE_SEQ
+			#end
+			]]></statement>
+		</query>
+		
+		<!-- 공통코드상세 목록 -->
+		<query id="COCOCdCode.selectCodeList" isDynamic="true" mappingStyle="upper">
+			<statement><![CDATA[
+				SELECT A.GRP_CD
+					  ,A.COM_CD
+					  ,A.COM_CD OLD_COM_CD
+					  ,A.CD_NM_KO
+					  ,A.CD_NM_EN
+					  ,A.SHRT_NM_KO
+					  ,A.SHRT_NM_EN
+					  ,A.USE_SEQ
+					  ,DECODE(A.USE_YN,'Y','false','true') USE_YN
+					  ,A.USR_DEF_CD1
+					  ,A.USR_DEF_CD2
+					  ,A.USR_DEF_CD3
+					  ,A.USR_DEF_CD4
+					  ,A.USR_DEF_CD5
+					  ,A.USR_DEF_CD6
+					  ,A.USR_DEF_CD7
+					  ,A.USR_DEF_CD8
+					  ,A.USR_DEF_CD9
+					  ,A.USR_DEF_CD10
+					  ,A.LVL
+					  ,A.RNK
+					  ,A.UP_GRP_CD
+					  ,B.GRP_NM_KO UP_GRP_NM
+					  ,A.UP_COM_CD
+					  ,C.CD_NM_KO UP_CD_NM
+					  ,A.REG_ID
+					  ,A.REG_DT
+					  ,A.UPD_ID
+					  ,A.UPD_DT
+					  ,A.UPD_IP
+				  FROM COCO_COMCD_D A
+				      ,COCO_COMCD_M B
+				      ,COCO_COMCD_D C
+				 WHERE A.UP_GRP_CD=B.GRP_CD(+)
+				   AND A.UP_GRP_CD=C.GRP_CD(+)
+				   AND A.UP_COM_CD=C.COM_CD(+)
+				 #if ($GRP_CD.trim().length()>0)
+				   AND A.GRP_CD = :GRP_CD
+				 #end
+				#if ($CD_NM_KO.trim().length()>0)
+				   AND A.CD_NM_KO LIKE '%' || :CD_NM_KO || '%'	
+				#end
+				#if ($CD_NM_EN.trim().length()>0)
+				   AND A.CD_NM_EN LIKE '%' || :CD_NM_EN || '%'	
+				#end
+				#if ($USE_YN.trim().length()>0)
+				   AND A.USE_YN=:USE_YN
+				#end
+				#if ($SUB_BIZ_TYPE.trim().length()>0)
+				   AND B.SUB_BIZ_TYPE LIKE :SUB_BIZ_TYPE || '%'
+				#end
+			  ORDER BY COM_CD
+			          ,USE_SEQ
+			]]></statement>
+		</query>
+
+		<!-- 공통코드상세 등록 -->
+		<query id="COCOCdCode.insertCode" isDynamic="true" mappingStyle="upper">
+			<statement>
+				INSERT INTO COCO_COMCD_D
+				           (GRP_CD
+						   ,COM_CD
+						   ,CD_NM_KO
+						   ,CD_NM_EN
+						   ,SHRT_NM_KO
+						   ,SHRT_NM_EN
+						   ,USE_SEQ
+						   ,USE_YN
+						   ,USR_DEF_CD1
+						   ,USR_DEF_CD2
+						   ,USR_DEF_CD3
+						   ,USR_DEF_CD4
+						   ,USR_DEF_CD5
+						   ,USR_DEF_CD6
+						   ,USR_DEF_CD7
+						   ,USR_DEF_CD8
+						   ,USR_DEF_CD9
+						   ,USR_DEF_CD10
+						   ,LVL
+						   ,RNK
+						   ,UP_GRP_CD
+						   ,UP_COM_CD
+						   ,REG_ID
+						   ,REG_DT
+						   ,UPD_ID
+						   ,UPD_DT
+						   ,UPD_IP)
+				     VALUES 
+				           (:GRP_CD
+						   ,DECODE(:COM_CD,'',(SELECT TRIM(TO_CHAR(NVL(TO_NUMBER(MAX(A.COM_CD)),0) + 1,RPAD('0',:CD_LEN,'0')))
+						       				   FROM COCO_COMCD_D A
+						      				   WHERE A.GRP_CD=:GRP_CD),:COM_CD)
+						   ,:CD_NM_KO
+						   ,:CD_NM_EN
+						   ,:SHRT_NM_KO
+						   ,:SHRT_NM_EN
+						   ,:USE_SEQ
+						   ,NVL(DECODE(:USE_YN,'false','Y','true','N',:USE_YN),'Y')
+						   ,:USR_DEF_CD1
+						   ,:USR_DEF_CD2
+						   ,:USR_DEF_CD3
+						   ,:USR_DEF_CD4
+						   ,:USR_DEF_CD5
+						   ,:USR_DEF_CD6
+						   ,:USR_DEF_CD7
+						   ,:USR_DEF_CD8
+						   ,:USR_DEF_CD9
+						   ,:USR_DEF_CD10
+						   ,:LVL
+						   ,:RNK
+						   ,:UP_GRP_CD
+						   ,:UP_COM_CD
+						   ,:GV_WORKER_ID
+						   ,SYSDATE
+						   ,:GV_WORKER_ID
+						   ,SYSDATE
+						   ,:GV_IP_ADDR)
+			</statement>
+		</query>
+		
+		<!-- 공통코드상세 수정 -->
+		<query id="COCOCdCode.updateCode" isDynamic="true">
+			<statement>
+				UPDATE COCO_COMCD_D
+				   SET COM_CD=:COM_CD
+				   	  ,CD_NM_KO=:CD_NM_KO
+				      ,CD_NM_EN=:CD_NM_EN
+					  ,SHRT_NM_KO=:SHRT_NM_KO
+					  ,SHRT_NM_EN=:SHRT_NM_EN
+					  ,USE_SEQ=:USE_SEQ
+					  ,USE_YN=NVL(DECODE(:USE_YN,'false','Y','true','N',:USE_YN),'Y')
+					  ,USR_DEF_CD1=:USR_DEF_CD1
+					  ,USR_DEF_CD2=:USR_DEF_CD2
+					  ,USR_DEF_CD3=:USR_DEF_CD3
+					  ,USR_DEF_CD4=:USR_DEF_CD4
+					  ,USR_DEF_CD5=:USR_DEF_CD5
+					  ,USR_DEF_CD6=:USR_DEF_CD6
+					  ,USR_DEF_CD7=:USR_DEF_CD7
+					  ,USR_DEF_CD8=:USR_DEF_CD8
+					  ,USR_DEF_CD9=:USR_DEF_CD9
+					  ,USR_DEF_CD10=:USR_DEF_CD10
+					  ,LVL=:LVL
+					  ,RNK=:RNK
+					  ,UP_GRP_CD=:UP_GRP_CD
+					  ,UP_COM_CD=:UP_COM_CD
+					  ,UPD_ID=:GV_WORKER_ID
+					  ,UPD_DT=SYSDATE
+					  ,UPD_IP=:GV_IP_ADDR
+			     WHERE GRP_CD=:GRP_CD
+			       AND COM_CD=:OLD_COM_CD
+			</statement>
+		</query>
+		
+		<!-- 공통코드상세 삭제 -->
+		<query id="COCOCdCode.deleteCode" isDynamic="true">
+			<statement>
+				DELETE FROM COCO_COMCD_D
+					  WHERE GRP_CD=:GRP_CD
+					    AND COM_CD=:OLD_COM_CD
+			</statement>
+		</query>
+		
+		<!-- 공통코드 팝업 -->
+		<query id="COCOCdCode.selectCodeListPop" isDynamic="true" mappingStyle="upper">
+			<statement><![CDATA[
+				SELECT A.GRP_CD
+					  ,A.GRP_NM_KO
+					  ,A.GRP_NM_EN
+					  ,A.USR_DEF_DESC
+					  ,A.USE_YN
+					  ,A.ADJ_ACPT_YN
+					  ,A.MNG_ORG_CD
+					  ,B.COM_CD
+					  ,B.CD_NM_KO
+					  ,B.CD_NM_EN
+					  ,B.SHRT_NM_KO
+					  ,B.SHRT_NM_EN
+					  ,B.USE_SEQ
+					  ,B.USE_YN
+					  ,B.USR_DEF_CD1
+					  ,B.USR_DEF_CD2
+					  ,B.USR_DEF_CD3
+					  ,B.USR_DEF_CD4
+					  ,B.USR_DEF_CD5
+					  ,B.USR_DEF_CD6
+					  ,B.USR_DEF_CD7
+					  ,B.USR_DEF_CD8
+					  ,B.USR_DEF_CD9
+					  ,B.USR_DEF_CD10
+					  ,B.LVL
+					  ,B.RNK
+					  ,B.UP_GRP_CD
+					  ,B.UP_COM_CD
+				#if ($GV_LANG_CD.trim().length()>0)
+					  ,A.GRP_NM_{{GV_LANG_CD}} GRP_NM
+					  ,B.CD_NM_{{GV_LANG_CD}} CD_NM
+				#end
+				  FROM COCO_COMCD_M A, COCO_COMCD_D B
+				 WHERE A.GRP_CD = B.GRP_CD
+				#if ($GRP_CD.trim().length()>0)
+				   AND A.GRP_CD LIKE :GRP_CD || '%'
+				#end
+				#if ($GRP_NM.trim().length()>0)
+				   AND (A.GRP_NM_KO LIKE '%' || :GRP_NM || '%'	
+				       OR A.GRP_NM_EN LIKE '%' || :GRP_NM || '%')
+				#end
+				#if ($COM_CD.trim().length()>0)
+				   AND B.COM_CD = :COM_CD
+				#end
+				#if ($CD_NM.trim().length()>0)
+				   AND (B.CD_NM_KO LIKE '%' || :CD_NM || '%'
+				       OR B.CD_NM_KO LIKE '%' || :CD_NM || '%')
+				#end
+			  ORDER BY GRP_NM_KO
+			          ,COM_CD
+			]]></statement>
+		</query>
+		
+		<!-- ============================== 학교코드MST 관련 ============================= -->
+		
+		<!-- 학교코드 -->
+		<query id="COCOCdCode.selectHakgyoCodeList" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT HAKGYO_CD
+						,HAKGYO_FNAME
+						,HAKGYO_GB
+						,HAKGYO_SNAME
+						,GUKJUK_CD
+						,DAEHAK_GUBUN
+						,SOJAEJI
+						,USE_YN
+				  FROM COCO_HAKGYO_M
+				 WHERE HAKGYO_CD IS NOT NULL
+				 #if ($HAKGYO_CD.trim().length()>0)
+				   AND HAKGYO_CD = :HAKGYO_CD
+				 #end
+				 #if ($USE_YN.trim().length()>0)
+				   AND USE_YN = :USE_YN
+				 #end
+				 #if ($HAKGYO_GB.trim().length()>0)
+				   AND HAKGYO_GB = :HAKGYO_GB
+				 #end
+				#if ($POST_NAME.trim().length()>0)
+				   AND POST_NAME LIKE  '%' || :POST_NAME || '%'	
+				#end
+				#if ($SEARCH_VALUE.trim().length()>0)
+				   AND (LOWER(HAKGYO_FNAME) LIKE '%' || :SEARCH_VALUE || '%'
+				   		OR HAKGYO_CD LIKE '%' || :SEARCH_VALUE || '%')
+				#end
+			  ORDER BY HAKGYO_FNAME
+			]]></statement>
+		</query>
+		
+		<!-- 학교코드 상세조회 -->
+		<query id="COCOCdCode.selectHakgyoCodeDetailList" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT HAKGYO_CD
+						,HAKGYO_FNAME
+						,HAKGYO_GB
+						,HAKGYO_SNAME
+						,GUKJUK_CD
+						,DAEHAK_GUBUN
+						,SOJAEJI
+						,POST_CD
+						,POST_NAME
+						,POST_BEONJI
+						,IPSI_GOGYO_GB
+						,IPSI_USE_YN
+						,DAEHAK_GUBUN
+						,KEDI_CD
+						,NEIS_CD
+						,DAEPYO_HAKGYO_CD
+						,FAX_NO
+						,TEL_NO
+						,USE_YN
+						,YS_USE_YN
+				  FROM COCO_HAKGYO_M
+				 WHERE HAKGYO_CD IS NOT NULL
+				 #if ($HAKGYO_CD.trim().length()>0)
+				   AND HAKGYO_CD = :HAKGYO_CD
+				 #end
+				 #if ($USE_YN.trim().length()>0)
+				   AND USE_YN = :USE_YN
+				 #end
+				 #if ($HAKGYO_GB.trim().length()>0)
+				   AND HAKGYO_GB = :HAKGYO_GB
+				 #end
+				#if ($POST_NAME.trim().length()>0)
+				   AND POST_NAME LIKE  '%' || :POST_NAME || '%'	
+				#end
+				#if ($SEARCH_VALUE.trim().length()>0)
+				   AND (LOWER(HAKGYO_FNAME) LIKE '%' || :SEARCH_VALUE || '%'
+				   		OR HAKGYO_CD LIKE '%' || :SEARCH_VALUE || '%')
+				#end
+			  ORDER BY HAKGYO_FNAME
+			]]></statement>
+		</query>
+		
+		<!-- 학교코드상세 삭제 -->
+		<query id="COCOCdCode.deleteHakgyoCode" isDynamic="true">
+			<statement>
+				DELETE FROM COCO_HAKGYO_M
+					  WHERE HAKGYO_CD=:HAKGYO_CD
+			</statement>
+		</query>
+		
+		<!-- 학교코드상세 입력 -->
+		<query id="COCOCdCode.insertHakgyoCode" isDynamic="true">
+			<statement>
+				INSERT INTO 
+					COCO_HAKGYO_M(
+						HAKGYO_CD, 
+						HAKGYO_FNAME, 
+						HAKGYO_SNAME, 
+						HAKGYO_GB, 
+						GUKJUK_CD, 
+						POST_CD, 
+						POST_NAME, 
+						POST_BEONJI, 
+						TEL_NO, 
+						FAX_NO, 
+						DAEHAK_GUBUN,
+						SOJAEJI,
+						IPSI_GOGYO_GB,
+						IPSI_USE_YN,
+						DAEPYO_HAKGYO_CD,
+						NEIS_CD,
+						KEDI_CD,
+						YS_USE_YN,
+						REG_ID, 
+						REG_DT, 
+						UPD_ID, 
+						UPD_DT)
+					VALUES(
+						NVL(:HAKGYO_CD, (SELECT 'Z' || TO_CHAR(SYSDATE, 'yyyy') || LPAD(NVL((SUBSTR(MAX(HAKGYO_CD), LENGTH(MAX(HAKGYO_CD))-3, LENGTH(MAX(HAKGYO_CD))) + 1), '0001'),4,0)
+											FROM COCO_HAKGYO_M 
+											WHERE HAKGYO_CD LIKE 'Z' || TO_CHAR(SYSDATE, 'YYYY') ||'%')), 
+						:HAKGYO_FNAME, 
+						:HAKGYO_SNAME, 
+						:HAKGYO_GB, 
+						:GUKJUK_CD, 
+						:POST_CD, 
+						:POST_NAME, 
+						:POST_BEONJI, 
+						:TEL_NO, 
+						:FAX_NO, 
+						:DAEHAK_GUBUN,
+						:SOJAEJI,
+						:IPSI_GOGYO_GB,
+						:IPSI_USE_YN,
+						:DAEPYO_HAKGYO_CD,
+						:NEIS_CD,
+						:KEDI_CD,
+						:YS_USE_YN,
+						:GV_WORKER_ID, 
+						SYSDATE, 
+						:GV_WORKER_ID, 
+						SYSDATE)
+			</statement>
+		</query>
+		
+		<!-- 학교코드상세 수정 -->
+		<query id="COCOCdCode.updateHakgyoCode" isDynamic="true">
+			<statement>
+				UPDATE  COCO_HAKGYO_M
+					SET
+						HAKGYO_CD=:HAKGYO_CD, 
+						HAKGYO_FNAME=:HAKGYO_FNAME, 
+						HAKGYO_SNAME=:HAKGYO_SNAME, 
+						HAKGYO_GB=:HAKGYO_GB, 
+						GUKJUK_CD=:GUKJUK_CD, 
+						POST_CD=:POST_CD, 
+						POST_NAME=:POST_NAME, 
+						POST_BEONJI=:POST_BEONJI, 
+						TEL_NO=:TEL_NO, 
+						FAX_NO=:FAX_NO,  
+						SOJAEJI=:SOJAEJI,
+						DAEHAK_GUBUN=:DAEHAK_GUBUN,
+						IPSI_GOGYO_GB=:IPSI_GOGYO_GB,
+						IPSI_USE_YN=:IPSI_USE_YN,
+						DAEPYO_HAKGYO_CD=:IPSI_USE_YN,
+						NEIS_CD=:NEIS_CD,
+						KEDI_CD=:KEDI_CD,
+						YS_USE_YN=:YS_USE_YN,
+						UPD_ID=:GV_WORKER_ID, 
+						UPD_DT=SYSDATE
+					WHERE HAKGYO_CD=:HAKGYO_CD
+			</statement>
+		</query>
+		
+		
+		
+		<!-- 현재날짜 -->
+		<query id="COCOCdCode.selectCurrentDate"  mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS') CUR_DATE
+				  FROM DUAL
+			]]></statement>
+		</query>
+		
+		<!-- 학교검색(Popup) 조회 -->
+		<query id="COCOCdCode.selectHakgyoCodePopupList" mappingStyle="upper" isDynamic="true">
+			<statement><![CDATA[
+				SELECT  HAKGYO_CD
+						,HAKGYO_FNAME
+						,HAKGYO_GB
+						,POST_CD
+						,POST_NAME
+						,TEL_NO
+						,FAX_NO
+						,REG_ID
+						,REG_DT
+						,UPD_ID
+						,UPD_DT
+						,POST_BEONJI
+						,HAKGYO_SNAME
+						,GUKJUK_CD
+						,DAEHAK_GUBUN
+						,SOJAEJI
+					   ,HAKGYO_CD AS OLD_HAKGYO_CD
+				  FROM COCO_HAKGYO_M
+				 WHERE HAKGYO_CD IS NOT NULL
+				 AND USE_YN='Y'
+				 #if ($HAKGYO_GB.trim().length()>0)
+				   AND HAKGYO_GB = :HAKGYO_GB
+				 #end
+				#if ($POST_NAME.trim().length()>0)
+				   AND POST_NAME LIKE  '%' || :POST_NAME || '%'	
+				#end
+				#if ($SEARCH_VALUE.trim().length()>0)
+				   AND (LOWER(HAKGYO_FNAME) LIKE '%' || :SEARCH_VALUE || '%'
+				   		OR HAKGYO_CD LIKE '%' || :SEARCH_VALUE || '%')
+				#end
+			  ORDER BY HAKGYO_FNAME
+			]]></statement>
+		</query>
+		
+	</queries>
+</queryservice>
+
+	

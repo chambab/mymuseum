@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryservice>
+	<queries>
+		<!-- ============================== 통계 관련 ============================= -->
+	
+		<query id="analize.selectUserCnt" isDynamic="true">
+			<statement><![CDATA[
+			SELECT REG_YMD, USER_CNT, MUSEUM_CNT
+			FROM (SELECT SUBSTR(A.REG_DT, 1, 8) AS REG_YMD, 
+			             --DECODE(A.USER_SR_CODE,'001','개인','002','미술관') AS GUBUN, 
+			             SUM(CASE WHEN A.USER_SR_CODE='001' THEN 1
+			                      ELSE 0
+			                 END) AS USER_CNT,
+			             SUM(CASE WHEN A.USER_SR_CODE='002' THEN 1
+			                      ELSE 0
+			                 END) AS MUSEUM_CNT
+			      FROM   UWFDTB0201 A
+			      GROUP BY SUBSTR(A.REG_DT, 1, 8)
+			)
+			ORDER BY REG_YMD
+			]]></statement>
+		</query>	
+		<query id="analize.selectMsgCnt" isDynamic="true">
+			<statement><![CDATA[
+			SELECT REG_DT, USER_MSG_CNT, USER_CNT, MUSEUM_MSG_CNT, MUSEUM_CNT
+			FROM (SELECT SUBSTR(A.REG_DT, 1, 8) AS REG_DT, 
+			             SUM(CASE WHEN B.USER_SR_CODE='001' THEN 1
+			                      ELSE 0
+			                 END) AS USER_MSG_CNT,
+			             COUNT(DISTINCT CASE WHEN B.USER_SR_CODE='001' THEN A.USER_ID
+			                                 ELSE NULL
+			                            END) AS USER_CNT,           
+			             SUM(CASE WHEN B.USER_SR_CODE='002' THEN 1
+			                      ELSE 0
+			                 END) AS MUSEUM_MSG_CNT,
+			             COUNT(DISTINCT CASE WHEN B.USER_SR_CODE='002' THEN A.USER_ID
+			                                 ELSE NULL
+			                            END) AS MUSEUM_CNT         
+			      FROM   UWFDTB0301 A, UWFDTB0201 B
+			      WHERE  A.USER_ID=B.USER_ID
+			      GROUP BY SUBSTR(A.REG_DT, 1, 8)
+			)
+			ORDER BY REG_DT
+			]]></statement>
+		</query>
+		<query id="analize.selectWriterMesageAna" isDynamic="true">
+			<statement><![CDATA[
+			SELECT WRITER_ID, CNT
+			FROM (SELECT WRITER_ID, COUNT(*) CNT
+			      FROM   UWFDTB0301
+			      GROUP BY WRITER_ID)
+			ORDER BY CNT DESC
+			]]></statement>
+		</query>
+		<query id="analize.selectUserMesageAna" isDynamic="true">
+			<statement><![CDATA[
+			SELECT USER_ID, CNT
+			FROM (SELECT USER_ID, COUNT(*) CNT
+			      FROM   UWFDTB0301
+			      GROUP BY USER_ID)
+			ORDER BY CNT DESC
+			]]></statement>
+		</query>																														
+	</queries>
+</queryservice>
+
+	

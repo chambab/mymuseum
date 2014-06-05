@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<dataConv>
+	<queries>
+		<!-- 인사말 -->
+		<query id="selectTpCenterInfo">
+			<statement>
+				SELECT 	CENTERID, 
+						TAGUSE,
+				 		CONTENT,
+						CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+						FILENAME 
+				FROM TPCENTERINFO
+				WHERE CENTERID LIKE ?				 
+			</statement>			
+		</query>	
+		<!-- 첨부 -->
+		<query id="insertCmmtnFile">
+			<statement>
+				INSERT INTO CMMTNFILE_CONV(FILE_ID,   FILE_SEQ,  FILE_PATH, SYS_FILE_NM, USER_FILE_NM, 
+				                      FILE_SIZE, FILE_EXTN, REG_DT,    REG_USR_ID)
+				               VALUES(?,         ?,         ?,         ?,           ?,
+				                      ?,         ?,         ?,         'ADMINT')
+			</statement>			
+		</query>
+		<!-- Intro 삭제 -->
+		<query id="deleteIntro">
+			<statement>
+				DELETE FROM VOLTNVOLNINTRO_CONV
+			</statement>			
+		</query>		
+		<!-- 소개정보를 최초 입력한다 -->
+		<query id="insertIntro">
+			<statement>
+				INSERT INTO VOLTNVOLNINTRO_CONV(VOLN_INTRO_SEQ,CTLG_NM, MENU_CODE, DE_INTRO, FRST_REG_TS,FRST_REGR_ID,LAST_MOD_TS,LAST_CORT_ID)  
+				VALUES(?,?,?,empty_clob(), SYSDATE,'ADMIN',SYSDATE,'ADMIN')
+			</statement>			
+		</query>				
+		<!-- 시군구의 소개정보 수정을 위한 조건 -->
+		<query id="selectVoltnVolnIntroForUpdate">
+			<statement>
+				SELECT DE_INTRO FROM VOLTNVOLNINTRO_CONV WHERE VOLN_INTRO_SEQ=? FOR UPDATE
+			</statement>			
+		</query>		
+		<!-- 시군구의 소개정보 수정 -->
+		<!-- query id="updateVoltnVolnIntro">
+			<statement>
+				UPDATE VOLTNVOLNINTRO SET DE_INTRO = ? WHERE VOLN_INTRO_SEQ=?
+			</statement>			
+		</query -->	
+		
+		
+		<!-- 연혁 -->
+		<query id="selectTpCenterHistory">
+			<statement>
+				SELECT 	CENTERID, 
+						TAGUSE,
+				 		CONTENT,
+						CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+						FILENAME 
+				FROM TPCENTERHISTORY
+				WHERE CENTERID LIKE ?
+			</statement>			
+		</query>	
+		<!-- 오시는길 -->
+		<query id="selectTpCenterLocation">
+			<statement>
+				SELECT 	CENTERID, 
+						TAGUSE,
+				 		CONTENT,
+						CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+						FILENAME 
+				FROM TPCENTERLOCATION
+				WHERE CENTERID LIKE ?
+			</statement>			
+		</query>
+			
+		<!-- 활동앨범 -->
+		<query id="selectTpCenterGallery">
+			<statement>
+				SELECT A.NUM, A.CENTERID, A.USERID, B.USERNAME, A.TITLE,  CONVERT(VARCHAR(8),A.REGDATE,112) AS REGDATE,  
+				       A.EMAIL, A.HOMEPAGE, A.PASSWORD, A.IP, A.READNUM, A.CONTENT, A.FILENAME, A.IMAGEWIDTH, A.IMAGEHEIGHT, A.IMAGESIZE,
+				       A.IMAGEFORMAT, A.SIDO+A.SIGUN AS CTL_CGG_CODE
+				FROM TPCENTERGALLERY A, TPMEMBER B
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=? AND A.TITLE IS NOT NULL
+			</statement>			
+		</query>
+		<!-- BBS 삭제 -->
+		<query id="deleteBBS">
+			<statement>
+				DELETE FROM VOLTNBBS_CONV
+			</statement>			
+		</query>	
+		<!-- BBS 삭제 -->
+		<query id="deleteCMMFile">
+			<statement>
+				DELETE FROM CMMTNFILE_CONV
+			</statement>			
+		</query>			
+		<!-- 활동앨범 시군구 입력 -->
+		<query id="insertVolTnBbsGallery">
+			<statement>
+				INSERT INTO VOLTNBBS_CONV(CTLG_CODE,   BBS_SEQ,      MGT_LV,   WRTR_NM, EMAIL,      SJ,     BLTI_CN, REG_PWD,     REG_YMD,    HOMEPAGE_URL,
+				                      REG_IP,      PBMGUL_NO,    ANSW_SEQ, ANSW_DP, TAG_USE_YN, INQ_NO, FILE_ID, FRST_REG_TS, FRST_REGR_ID,
+				                      LAST_MOD_TS, LAST_CORT_ID)
+				            VALUES(   ?,           ?,            ?,        ?,       ?,          ?,      empty_clob(),       ?,           ?,          ?,
+				                      ?,           ?,            ?,        ?,       ?,          ?,      ?,       TO_DATE(?,'YYYYMMDD'),           UPPER(?),
+				                      SYSDATE,     UPPER(?))
+			</statement>			
+		</query>	
+		<!-- 활동앨범 시군구 입력(CLOB) -->
+		<query id="selectVoltnBbsForUpdate">
+			<statement>
+				SELECT BLTI_CN FROM VOLTNBBS_CONV WHERE CTLG_CODE=? AND BBS_SEQ=? FOR UPDATE
+			</statement>			
+		</query>
+		
+		<!-- 자유게시판 -->
+		<query id="selectTpFreeBoard">
+			<statement>
+				SELECT NUM, REF, RELEVEL, WRITER AS USERNAME, TITLE,  CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+				          EMAIL, HOMEPAGE, PASSWORD, IP, READNUM, CONTENT, 
+				          SIDO+SIGUN AS CTL_CGG_CODE
+				FROM TPFREEBOARD
+				WHERE SIGUN=? AND SPAM_CHK='N' ORDER BY REF, RELEVEL
+			</statement>			
+		</query>	
+
+		<!-- 미담사례 -->
+		<query id="selectTpEpisode">
+			<statement>
+				SELECT A.NUM, A.CENTERID, A.USERID, B.USERNAME, A.TITLE,  CONVERT(VARCHAR(8),A.REGDATE,112) AS REGDATE,  
+				       A.READNUM, A.CONTENT, A.FILENAME, 
+				       A.SIDO+A.SIGUN AS CTL_CGG_CODE
+				FROM TPEPISODE A, TPMEMBER B
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=?
+			</statement>			
+		</query>	
+
+		<!-- 공지사항 -->
+		<query id="selectNotice">
+			<statement>
+				SELECT NUM, CENTERID, 
+						CASE WHEN RTRIM(USERID) = '' THEN 'EMPTY'
+						     ELSE USERID
+						END AS USERID, 						
+						WRITER AS USERNAME, TITLE,  CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+				       EMAIL, HOMEPAGE, PASSWORD, IP, READNUM, CONTENT, FILENAME1 AS FILENAME				    
+				FROM TPJABONGNOTICE
+				WHERE AREA=?
+			</statement>			
+		</query>	
+		
+		<!-- 자료실 -->
+		<query id="selectBbsPds">
+			<statement>				
+				SELECT A.NUM, A.USERID, B.USERNAME, A.EMAIL, A.HOMEPAGE, A.TITLE,  CONVERT(VARCHAR(8),A.REGDATE,112) AS REGDATE,  
+				       A.READNUM, A.CONTENT, A.FILENAME, 
+				       A.SIDO+A.SIGUN AS CTL_CGG_CODE
+				FROM TPPDS A, TPMEMBER B
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=?
+			</statement>			
+		</query>	
+		<!-- QNA -->
+		<query id="selectBbsQna">
+			<statement>				
+				SELECT NUM, REF, RELEVEL, WRITER AS USERNAME, TITLE,  CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+				          EMAIL, HOMEPAGE, PASSWORD, IP, READNUM, CONTENT, FILENAME				         
+				FROM TPQNABOARD
+				WHERE AREA=? AND SPAM_CHK='N' ORDER BY REF, RELEVEL
+			</statement>			
+		</query>	
+		
+		<!-- 봉사모집 -->
+		<query id="selectRqst">
+			<statement>				
+				SELECT A.NUM,A.ADMINID AS USERID, A.RECNAME AS SUYONAME, A.RECNAME + ' 봉사요청' AS TITLE,  
+				       CONVERT(VARCHAR(8),A.REGDATE,112) AS REGDATE, A.READNUM, A.CONTENT, 
+				       HELPYEAR+'-'+HELPMONTH+'-'+HELPDAY AS STARTDAY, A.HELPENDYEAR+'-' + A.HELPENDMONTH+'-' + A.HELPENDDAY AS ENDDAY, 
+				       HELPSTARTTIME, HELPENDTIME
+				FROM TPSUPPORTHELP A, TPMEMBER B
+				WHERE A.ADMINID=B.USERID AND A.SIDO+A.SIGUN = ?
+			</statement>			
+		</query>
+		
+		<!-- 후원신청 -->
+		<query id="selectSupportAppl">
+			<statement>				
+				SELECT NUM, REF, RELEVEL, WRITER AS TITLE, EMAIL, PASSWORD, SERVICENAME, 
+					     SERVICEMONEY, TITLE, CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  READNUM, CONTENT
+				FROM TPSUPPORTCAN 
+				WHERE HOPEAREA = ?	
+			</statement>			
+		</query>		
+		
+		<!-- 봉사신청은 상담 및 문의로전환 -->
+		<query id="selectHelpAppl">
+			<statement>				
+				SELECT NUM, REF, RELEVEL, EMAIL, 
+						CASE WHEN RTRIM(USERID) = '' THEN 'EMPTY'
+						     ELSE USERID
+						END AS USERID, 
+						WRITER AS USERNAME, PASSWORD, HELPYEAR+'-'+HELPMONTH+'-'+HELPDAY AS STARTDAY,
+				       HELPENDYEAR+'-' + HELPENDMONTH+'-' + HELPENDDAY AS ENDDAY,  HELPSTARTTIME, HELPENDTIME, TITLE,
+				       CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE, READNUM, CONTENT
+				FROM TPHELPCAN
+				WHERE HOPEAREA=?
+			</statement>			
+		</query>
+		<!-- 작은게시판 -->
+		<query id="selectCenterBoard">
+			<statement>				
+				SELECT NUM, REF, RELEVEL, 
+					   CASE WHEN RTRIM(USERID) = '' THEN 'EMPTY'
+					        ELSE USERID
+					   END AS USERID,  
+						READNUM,  WRITER AS USERNAME, TITLE,  CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+				            PASSWORD, READNUM, CONTENT, FILENAME				         
+				FROM TPCENTERBOARD
+				WHERE SIGUN=?  ORDER BY REF, RELEVEL
+			</statement>			
+		</query>
+		<!-- 뉴스보도자료 -->
+		<query id="selectNews">
+			<statement>				
+				SELECT NUM, REF, RELEVEL, USERID, HOMEPAGE, EMAIL,  READNUM, WRITER AS USERNAME, TITLE,  CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE,  
+				          EMAIL, HOMEPAGE, PASSWORD, IP, READNUM, CONTENT, FILENAME				         
+				FROM TPNEWSPAPER
+				WHERE AREA=? ORDER BY REF, RELEVEL
+			</statement>			
+		</query>					
+		
+		<!-- 추천사이트 -->
+		<query id="selectFavoritSite">
+			<statement>				
+				SELECT NUM, USERID, HOMEPAGE, HOMEPAGENAME, 
+						   CONVERT(VARCHAR(8),REGDATE,112) AS REGDATE, READNUM, PASSWORD
+				FROM   TPCOOLSITE
+				WHERE SIDO+SIGUN=?
+			</statement>			
+		</query>	
+		<!-- 추천사이트 입력 -->
+		<query id="insertFavoritSite">
+			<statement>				
+
+				INSERT INTO VOLTNRMNTHOMEPG_CONV(RMNT_HOMEPAGE_SEQ, HOMEPAGE_NM, HOMEPAGE_URL, DE_INTRO,
+				                            RMNT_HOMEPAGE_CL, INQ_NO, REG_PWD, FRST_REG_TS,
+				                            FRST_REGR_ID, LAST_MOD_TS, LAST_CORT_ID)
+				                 VALUES(    ?,                 ?,           ?,             ?,
+				                            '01',              ?,           ?,             ?,
+				                            ?,                 SYSDATE,     ?)
+			</statement>			
+		</query>	
+		<!-- 추천사이트 입력 -->
+		<query id="deleteFavoritSite">
+			<statement>				
+
+				DELETE FROM VOLTNRMNTHOMEPG_CONV
+			</statement>			
+		</query>		
+
+		<!-- 첨부다운로드1 -->
+		<query id="download1">
+			<statement>				
+				SELECT FILENAME FROM TPCENTERINFO WHERE CENTERID LIKE ? AND FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download2">
+			<statement>				
+				SELECT FILENAME FROM TPCENTERHISTORY WHERE CENTERID LIKE ?  AND FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download3">
+			<statement>				
+				SELECT FILENAME FROM TPCENTERLOCATION WHERE CENTERID LIKE ?  AND FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download4">
+			<statement>				
+				SELECT A.FILENAME 
+				FROM TPCENTERGALLERY A, TPMEMBER B 
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=?  AND A.FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download5">
+			<statement>				
+				SELECT A.FILENAME 
+				FROM TPEPISODE A, TPMEMBER B 
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=?  AND FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download6">
+			<statement>				
+				SELECT FILENAME1 AS FILENAME 
+				FROM TPJABONGNOTICE WHERE AREA=?  AND FILENAME1 IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download7">
+			<statement>				
+				SELECT A.FILENAME 
+				FROM TPPDS A, TPMEMBER B 
+				WHERE A.USERID=B.USERID AND A.SIDO+A.SIGUN=? AND A.FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드1 -->
+		<query id="download8">
+			<statement>				
+				SELECT FILENAME 
+				FROM TPQNABOARD 
+				WHERE AREA=? AND SPAM_CHK='N' AND FILENAME IS NOT NULL
+			</statement>			
+		</query>	
+		<!-- 첨부다운로드9 -->
+		<query id="download9">
+			<statement>				
+				SELECT FILENAME 
+				FROM TPNEWSPAPER 
+				WHERE AREA=? AND FILENAME IS NOT NULL
+			</statement>			
+		</query>
+		<!-- 첨부다운로드10 -->
+		<query id="download10">
+			<statement>				
+				SELECT FILENAME 
+				FROM TPCENTERBOARD 
+				WHERE SIGUN=? AND FILENAME IS NOT NULL
+			</statement>			
+		</query>	
+		<!-- 행사 기본정보 -->		
+		<query id="selectEventBase">
+			<statement>				
+				SELECT NUM AS EVENT_PGM_SEQ,             
+				       SUBSTRING(REPLACE(CONVERT(CHAR(10),EVENTOPENDATE,126), '-', ''),1,6)	 AS EVENT_PGM_YM,
+				       SUBSTRING(EVENTTITLE,1,30) 								AS EVENT_PGM_NM, 
+				       '0', 
+				       EVENTCONTENT 							AS EVENT_PGM_BRF, 
+				       SUBSTRING(EVENTPLACE,1,30)				AS EVENT_PGM_SPR,
+				       CASE WHEN REGOK='Y' THEN 'Y'
+				            ELSE 'N'
+				       END 											AS JK_YN, 
+					   '1703' 										AS VOLN_ACTV_SE, 
+					   ?  												AS CTL_CGG_CODE, 
+					   '' 												AS CT_ORG_CODE,         
+				       SUBSTRING(REPLACE(CONVERT(CHAR(10),EVENTOPENDATE,126), '-', ''),1,8)	 AS FRST_REG_TS,
+				       'ADMINT',          
+				       SUBSTRING(REPLACE(CONVERT(CHAR(10),EVENTOPENDATE,126), '-', ''),1,8)	 AS LAST_MOD_TS,
+				       'ADMINT'
+				FROM TPCENTERWELFAREEVENT
+				WHERE SIGUN=? AND EVENTOPENDATE != '' AND EVENTOPENDATE != ''	
+			</statement>			
+		</query>
+		<query id="insertEventBase">
+			<statement>
+				INSERT INTO VOLTNPGMBASE_CONV(EVENT_PGM_SEQ,
+											EVENT_PGM_YM,
+											EVENT_PGM_NM,
+											EVENT_PGM_SE,
+											EVENT_PGM_BRF,
+											EVENT_PGM_SPR,
+											JK_YN,
+											VOLN_ACTV_SE,
+											CTL_CGG_CODE,
+											CT_ORG_CODE,
+											FRST_REG_TS,
+											FRST_REGR_ID,
+											LAST_MOD_TS,
+											LAST_CORT_ID)
+				VALUES(?, ?, ?, ?, empty_clob(), ?, ?, ?, ?, ?, TO_DATE(?,'YYYYMMDD'), ?, 
+		        TO_DATE(?,'YYYYMMDD'), ?)
+			</statement>			
+		</query>		
+		<!-- 내용을 Update -->
+		<query id="selectI14ForUpdate">
+			<statement>
+				SELECT EVENT_PGM_BRF FROM VOLTNPGMBASE_CONV WHERE EVENT_PGM_SEQ=? FOR UPDATE
+			</statement>			
+		</query>	
+		<!-- Intro 삭제 -->
+		<query id="deleteEventBase">
+			<statement>
+				DELETE FROM VOLTNPGMBASE_CONV
+			</statement>			
+		</query>																																																																																									
+	</queries>
+</dataConv>

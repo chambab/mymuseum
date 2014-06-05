@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="eureka" basedir="." default="build.all">
+	
+	<property file="build_myMuseum.properties" />	
+	<property name="project.root" value="${PROJECT.ROOT.WORKSPACE}/${PROJECT.NAME}" />		
+	<property name="target.dir" value="${DIST.WORKSPACE}/${DIST.NAME}" />		
+		
+	
+	<!-- PMD INFO -->	
+	<property name="report.path" value="${PROJECT.ROOT.WORKSPACE}/pmd-report" />
+	<property name="pmd.lib.dir" value = "../../../plugins/pmd/WEB-INF/lib" />
+	<path id="pmd.classpath" >
+    <fileset dir="${pmd.lib.dir}" >
+		  <include name='*.jar'/>
+		</fileset>
+    </path>	
+	
+	<!-- PMD INIT -->
+	<target name="pmd.init"> 
+    	<tstamp> 
+      		<format property="DSTAMP" pattern="yyyyMMdd"/> 
+      		<format property="TSTAMP" pattern="HH"/> 
+    	</tstamp>
+    	<echo message="PMD FILE COUNT START"/>
+    
+    	<resourcecount property="filecnt">
+      		<fileset dir="${project.root}/src/main/java"  excludes="**/co/**, **/common/**" >
+       			<include name="**/*.java" />
+      		</fileset>
+    	</resourcecount>
+    	<echo message="pmd filecnt : ${filecnt}"/>
+    	<echo message="PMD FILE COUNT END"/>
+	</target>	
+	
+	<!-- PMD RUN -->
+	<target name="pmd" description="run pmd">
+		<mkdir dir="${report.path}/${DSTAMP}"/>	
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath"/>
+		<pmd shortFilenames="false" rulesetfiles="pmd-ruleset-v3-3.2.3over.xml" >
+			<formatter type="csv" toFile="${report.path}/${DSTAMP}/pmd_report-${DSTAMP}${TSTAMP}.csv" linkPrefix="http://pmd.sourceforge.net/xref/"/>
+			<formatter type="xml" toFile="${report.path}/pmd.xml" linkPrefix="http://pmd.sourceforge.net/xref/"/>
+			<formatter type="html" toFile="${report.path}/${DSTAMP}/pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/"/>
+		    <fileset dir="${project.root}/src/main/java"  excludes="**/co/**, **/common/**" >
+	       		<include name="**/*.java"/>
+	      	</fileset>
+	     </pmd>
+	</target>	
+	     	
+
+
+	<!-- DIST -->
+	<target name="init">
+		<echo>*********************************</echo>
+		<echo>Initializing Process</echo>
+		<echo>*********************************</echo>
+	
+	</target>	
+	
+	<target name="build">
+		<echo>*********************************</echo>
+		<echo>Build src/main/java File </echo>		
+		<echo>*********************************</echo>					
+		<mkdir dir="${project.root}/webapp/WEB-INF/classes" />		
+		<javac destdir="${project.root}/webapp/WEB-INF/classes" 
+			   srcdir="${project.root}/src/main/java" 
+			   target="1.6" debug="true" deprecation="false" encoding="utf-8">
+			<classpath>
+				<fileset dir="${project.root}/webapp/WEB-INF/lib">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${WAS.SERVLET.DIR}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${WAS.COMMON.DIR}">
+					<include name="**/*.jar" />
+				</fileset>				
+				<fileset dir="${JAVA.HOME}">
+					<include name="**/*.jar" />
+				</fileset>				
+			</classpath>
+		</javac>
+		<copy todir="${project.root}/webapp/WEB-INF/classes">
+			<fileset dir="${project.root}/res/" excludes="**/.metadata/**">
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />	
+			</fileset>			
+		</copy>		
+		
+	</target>	
+	
+	
+	
+	<!-- 통합 WAS Server 로 이관 -->		
+	<target name="deploy.was">
+		<echo>*********************************</echo>
+		<echo>Deploy Was(ALL)</echo>
+		<echo>*********************************</echo>	
+		<copy todir="${DIST.WORKSPACE}/${DIST.NAME}">
+			<fileset dir="${project.root}/webapp/" excludes="**/.metadata/**">
+				<include name="**/*.*" />				
+			</fileset>			
+		</copy>	
+	</target>		
+
+	
+	<!-- Remote WAS Server 로 이관 -->	
+	<target	name="deploy.remote">
+		<ftp server="${REMOTE.SERVER}"
+			port="21"
+			remotedir="./"
+			userid="${REMOTE.ID}"
+			password="${REMOTE.PW}"
+			binary="yes">
+			<fileset dir="${project.root}/webapp/" excludes="**/.metadata/**">
+				<include name="**/*.*" />						
+			</fileset>			
+		</ftp>
+		<echo message="files Copy 완료(${REMOTE.SERVER})"/>
+	</target>
+			
+    <target name="tomcat-stop">
+        <echo message="Stop Tomcat" />  
+        <java dir="${TOMCAT.HOME}/bin/" jar="${TOMCAT.HOME}/bin/bootstrap.jar" fork="true">
+            <arg value="stop"/>   
+        </java>      
+    </target>
+
+	
+    <target name="tomcat-start">
+        <echo message="Start Tomcat" />
+        <java dir="${TOMCAT.HOME}/bin/" jar="${TOMCAT.HOME}/bin/bootstrap.jar" fork="true">
+            <arg value="restart"/>   
+        </java>
+    </target>
+	
+	<target name="tomcat-restart">
+	     <exec dir="${TOMCAT.HOME}/bin/" executable="./catalina.sh restart" />
+	</target>
+	
+
+	
+	
+	
+	
+	<target name="pmd.all" depends="pmd.init, pmd" />
+	
+	<target name="build.all" depends="init, build" />
+	
+	<target name="build.deploy" depends="init, build, deploy.was, deploy.remote" />
+	
+</project>

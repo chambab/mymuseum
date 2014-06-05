@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users type="array">
+	<user>
+		<welMbdId></welMbdId>
+		<welMbdNm></welMbdNm>
+		<welMbdEngStnNm></welMbdEngStnNm>
+		<welMbdLarClCode></welMbdLarClCode>
+		<welMbdMidClCode></welMbdMidClCode>
+		<welMbdSmlCode></welMbdSmlCode>
+		<welMbdIdeNo></welMbdIdeNo>
+		<welMbdIdeSeqNo></welMbdIdeSeqNo>
+		<critFamMbdId></critFamMbdId>
+		<siteAdmRegnCode></siteAdmRegnCode>
+		<permAdmRegnCode></permAdmRegnCode>
+		<mbdStYmd></mbdStYmd>
+		<mbdEndYmd></mbdEndYmd>
+		<mdbEndRsnCode></mdbEndRsnCode>
+	</user>
+</users>

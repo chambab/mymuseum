@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="User">
+
+	<typeAlias alias="user" type="com.mm.user.model.User"/>
+	<resultMap	class="user" id="userResult">
+		<result property="userId" column="USER_ID" />
+		<result property="userNm"	column="USER_NM" />
+		<result property="userSrCode" column="USER_SR_CODE" />
+		<result	property="cn" column="CN"/>
+		<result	property="webUrl" column="WEB_URL"/>
+		<result	property="openYn" column="OPEN_YN"/>
+		<result	property="regDt" column="REG_DT"/>
+		<result	property="regInfo" column="REG_INFO"/>
+		<result	property="userImg" column="USER_IMG"/>		
+		<result	property="followerCnt" column="FOLLOWER_CNT"/>
+		<result	property="followingCnt" column="FOLLOWING_CNT"/>
+		<result	property="messageCnt" column="MESSAGE_CNT"/>		
+		<result	property="userPw" column="USER_PW"/>
+	</resultMap>
+	<typeAlias alias="rel" type="com.mm.user.model.Rel"/>	
+	<resultMap	class="rel" id="relResult">
+		<result property="mstUserId" column="MST_USER_ID" />
+		<result property="subUserId"	column="SUB_USER_ID" />
+		<result property="regDt" column="REG_DT" />		
+	</resultMap>
+	
+	<select id="selectUser" resultMap="userResult" parameterClass="string">
+	<![CDATA[
+		SELECT /*+ LEADING(A) */
+               A.USER_ID, A.USER_NM, A.USER_SR_CODE, A.CN, A.WEB_URL, A.OPEN_YN, A.REG_DT, A.REG_INFO, A.USER_IMG, A.USER_PW, 
+		       (SELECT /*+ MO_MERGE */ COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  MST_USER_ID=A.USER_ID) FOLLOWER_CNT,
+		       (SELECT /*+ MO_MERGE */ COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  SUB_USER_ID=A.USER_ID) FOLLOWING_CNT,
+		       (SELECT /*+ MO_MERGE */ COUNT(*)
+		        FROM   UWFDTB0301
+		        WHERE  USER_ID=A.USER_ID) MESSAGE_CNT 
+		FROM   UWFDTB0201 A
+		WHERE  A.USER_ID=#userId#		
+		]]>
+	</select>
+	
+	<select id="selectUserByPw" resultMap="userResult" parameterClass="string">
+	<![CDATA[
+		SELECT A.USER_ID, A.USER_NM, A.USER_SR_CODE, A.CN, A.WEB_URL, A.OPEN_YN, A.REG_DT, A.REG_INFO, A.USER_IMG, A.USER_PW,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  MST_USER_ID=A.USER_ID) FOLLOWER_CNT,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  SUB_USER_ID=A.USER_ID) FOLLOWING_CNT,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0301
+		        WHERE  USER_ID=A.USER_ID) MESSAGE_CNT 
+		FROM   UWFDTB0201 A
+		WHERE  A.USER_ID=#value#		  
+		]]>
+	</select>
+		
+	<select id="selectFollowerUsers" resultMap="userResult" parameterClass="string">
+	<![CDATA[
+		SELECT /*+ LEADING(B A) */
+		       A.USER_ID, A.USER_NM, A.USER_SR_CODE, A.CN, A.WEB_URL, A.OPEN_YN, A.REG_DT, A.REG_INFO, A.USER_PW,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  MST_USER_ID=A.USER_ID) FOLLOWER_CNT,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0101
+		        WHERE  SUB_USER_ID=A.USER_ID) FOLLOWING_CNT,
+		       (SELECT COUNT(*)
+		        FROM   UWFDTB0301
+		        WHERE  USER_ID=A.USER_ID) MESSAGE_CNT 
+		FROM   UWFDTB0201 A, UWFDTB0101 B
+		WHERE  B.MST_USER_ID=#value#
+		AND    B.SUB_USER_ID=A.USER_ID
+		]]>
+	</select>
+	
+	
+	<insert id="createUser" parameterClass="user">
+	<![CDATA[
+		INSERT INTO UWFDTB0201(USER_ID, USER_PW, USER_NM, USER_SR_CODE, CN, WEB_URL, OPEN_YN, REG_DT, REG_INFO)
+		            VALUES(#userId#, #userPw#, '', '001', '', '', 'Y', 
+		                   TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), '')
+		]]>
+	</insert>	
+	
+	<insert id="createRel" parameterClass="rel">
+	<![CDATA[
+		INSERT INTO UWFDTB0101(MST_USER_ID, SUB_USER_ID, REG_DT)
+		            VALUES(#mstUserId#, #subUserId#, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
+		]]>
+	</insert>	
+</sqlMap>

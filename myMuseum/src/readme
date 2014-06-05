@@ -1,0 +1,12 @@
+#	2002.09.18 by CHAMBAB
+#	날짜 사용을 위한 Class
+package util;
+public class MyDate
+{
+	public MyDate();
+	public String getToday();  // return YYYYMMDD  오늘 날짜
+	public String getNextDay(String yyyymmdd); 입력한 날짜의 다음날
+	public String getPreDay(String yyyymmdd);  입력한 날짜의 이전날
+	public String getNextDay();  // return yyyymmdd 오늘날짜의 다음날
+	public String getPreDay();    // return yyyymmdd 오늘날짜의 이전날
+}

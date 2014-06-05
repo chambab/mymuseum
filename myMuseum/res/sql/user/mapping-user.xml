@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryservice>
+	<queries>
+		<!-- ============================== User 관련 ============================= -->
+		<!-- Tag 등록 -->
+		<query id="user.selectUserCnt" isDynamic="true">
+			<statement><![CDATA[
+				SELECT USER_SR_CODE, COUNT(*) USER_CNT
+				FROM   UWFDTB0201
+				GROUP BY USER_SR_CODE				
+			]]></statement>
+		</query>
+		<query id="user.selectMyFollowList" isDynamic="true">
+			<statement><![CDATA[
+				SELECT /*+ LEADING(A B C) USE_NL(A B C) INDEX(A UWFDTB0101_PK) */
+				       B.USER_ID, A.REG_DT AS FOLLOW_DT, B.USER_NM, B.USER_SR_CODE, B.CN, B.WEB_URL, B.OPEN_YN, B.REG_DT AS CREATE_DT, 
+				       B.REG_INFO, B.USER_IMG, C.LATITUDE, C.LONGITUDE, C.COMPASS,
+				       (SELECT COUNT(*)
+				        FROM   UWFDTB0301
+				        WHERE  USER_ID=A.SUB_USER_ID)  AS MSG_CNT
+				FROM   UWFDTB0101 A, UWFDTB0201 B, CDCTCREGNINFO C
+				WHERE  A.MST_USER_ID=:userId
+				AND    A.SUB_USER_ID=B.USER_ID
+				AND    B.REGN_INF_ID=C.REGN_INF_ID(+)			
+			]]></statement>
+		</query>	
+		<query id="user.selectMyFollowingList" isDynamic="true">
+			<statement><![CDATA[
+				SELECT /*+ LEADING(A B C) USE_NL(A B C) INDEX(A UWFDTB0101_PK) */
+				       B.USER_ID, A.REG_DT AS FOLLOW_DT, B.USER_NM, B.USER_SR_CODE, B.CN, B.WEB_URL, B.OPEN_YN, B.REG_DT AS CREATE_DT, 
+				       B.REG_INFO, B.USER_IMG, C.LATITUDE, C.LONGITUDE, C.COMPASS,
+				       (SELECT COUNT(*)
+				        FROM   UWFDTB0301
+				        WHERE  USER_ID=A.MST_USER_ID)  AS MSG_CNT
+				FROM   UWFDTB0101 A, UWFDTB0201 B, CDCTCREGNINFO C
+				WHERE  A.SUB_USER_ID=:userId
+				AND    A.MST_USER_ID=B.USER_ID
+				AND    B.REGN_INF_ID=C.REGN_INF_ID(+)			
+			]]></statement>
+		</query>																												
+	</queries>
+</queryservice>

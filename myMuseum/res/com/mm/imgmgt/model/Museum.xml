@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Museum">
+
+	<typeAlias alias="museum" type="com.mm.imgmgt.model.Museum"/>
+	<resultMap	class="museum" id="museumResult">
+		<result property="msgId" column="MSG_ID" />
+		<result property="msgCn" column="MSG_CN" />
+		<result property="userId" column="USER_ID" />
+		<result property="regDt" column="REG_DT" />
+		<result property="userImg" column="USER_IMG" />				
+	</resultMap>
+	<resultMap	class="museum" id="messageResult">
+		<result property="msgId" column="MSG_ID" />
+		<result property="msgCn" column="MSG_CN" />
+		<result property="userId" column="USER_ID" />
+		<result property="regDt" column="REG_DT" />
+		<result property="userInfo" column="USER_INFO" />
+		<result property="userImg" column="USER_IMG" />
+		<result property="openYn" column="OPEN_YN" />						
+	</resultMap>
+	<resultMap	class="museum" id="messageMsgId">
+		<result property="msgId" column="MSG_ID" />			
+	</resultMap>	
+	<resultMap	class="museum" id="regnId">
+		<result property="regnInfId" column="REGN_INF_ID" />			
+	</resultMap>
+	<resultMap	class="museum" id="mymuseum">
+		<result property="userId" column="USER_ID" />
+		<result property="userNm" column="USER_NM" />
+		<result property="regDt" column="REG_DT" />		
+		<result property="latitude" column="LATITUDE" />
+		<result property="longitude" column="LONGITUDE" />
+		<result property="compass" column="COMPASS" />			
+	</resultMap>	
+	
+		
+	
+	<insert id="createMsg" parameterClass="museum">
+	<![CDATA[
+		INSERT INTO UWFDTB0301(MSG_ID, USER_ID, REGN_INF_ID, MSG_CN, REG_DT, INFO_ID, WRITER_ID)
+		SELECT #msgId#, #userId#, ' ', #msgCn#,
+		        TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),'', #writerId#	
+		FROM   DUAL	                   
+		]]>
+	</insert>	
+	
+	<select id="selectMsgId" resultMap="messageMsgId">
+	<![CDATA[
+		SELECT 'M'||LPAD(UWFDTB0301_SEQ_01.NEXTVAL,14,0) AS MSG_ID
+		FROM   DUAL	
+		]]>
+	</select>	
+	<select id="selectRegnId" resultMap="regnId">
+	<![CDATA[
+		SELECT 'R'||LPAD(CDCTCREGNINFO_SEQ_01.NEXTVAL,14,0) AS REGN_INF_ID
+		FROM   DUAL	
+		]]>
+	</select>	
+	
+	<select id="selectMyMessageList" resultMap="museumResult" parameterClass="string">
+	<![CDATA[
+		SELECT /*+ LEADING(A B C) INDEX(A UWFDTB0301_IX03) INDEX(B UWFDTB0201_PK) INDEX(C UWFDTB0201_PK) */
+		       A.MSG_ID, CASE WHEN B.USER_SR_CODE='002' THEN 'ⓜ'||A.USER_ID || '['||A.WRITER_ID||']'
+                              WHEN B.USER_SR_CODE='001' AND A.USER_ID<>A.WRITER_ID THEN '@'||A.USER_ID || '['||A.WRITER_ID||']'
+		                      ELSE '@'||A.USER_ID 
+		                 END  AS USER_ID, 
+                         A.REGN_INF_ID, A.MSG_CN, SUBSTR(A.REG_DT,1,12) AS REG_DT, 
+               A.INFO_ID, C.USER_IMG, A.WRITER_ID		       
+		FROM   UWFDTB0301 A, UWFDTB0201 B, UWFDTB0201 C
+		WHERE  1=1
+		AND    A.WRITER_ID=#value#
+		AND    A.USER_ID=B.USER_ID
+		AND    B.OPEN_YN='Y'
+        AND    C.USER_ID=(CASE WHEN A.USER_ID=A.WRITER_ID OR A.WRITER_ID IS NULL THEN A.USER_ID
+                               ELSE A.WRITER_ID
+                          END)  
+		ORDER BY A.REG_DT DESC			
+		]]>
+	</select>
+	
+	<select id="selectFollowMuseum" resultMap="museumResult" parameterClass="string">
+	<![CDATA[
+		SELECT /*+ LEADING(A B C) INDEX(A UWFDTB0101_IX01) INDEX(B UWFDTB0301_IX01) 
+		           INDEX(C UWFDTB0201_PK) INDEX(D UWFDTB0201_PK) USE_NL(C D)
+		       */
+		       B.MSG_ID, CASE WHEN C.USER_SR_CODE='002' THEN 'ⓜ'||B.USER_ID || '['||B.WRITER_ID||']'
+                              WHEN C.USER_SR_CODE='001' AND B.USER_ID<>B.WRITER_ID THEN '@'||B.USER_ID || '['||B.WRITER_ID||']'
+		                      ELSE '@'||B.USER_ID 
+		                 END  AS USER_ID, 
+		       B.REGN_INF_ID, B.MSG_CN, SUBSTR(B.REG_DT,1,12) AS REG_DT, B.INFO_ID, B.WRITER_ID,
+		       D.USER_IMG
+		FROM   UWFDTB0101 A, UWFDTB0301 B, UWFDTB0201 C, UWFDTB0201 D
+		WHERE  A.SUB_USER_ID=#value#
+		AND    A.MST_USER_ID=B.USER_ID
+        AND    B.USER_ID=C.USER_ID        
+		AND    D.USER_ID=(CASE WHEN B.USER_ID=B.WRITER_ID OR B.WRITER_ID IS NULL THEN B.USER_ID
+                               ELSE B.WRITER_ID
+                          END)        
+		ORDER BY B.REG_DT DESC
+		]]>
+	</select>	
+	
+	<select id="selectMessage" resultMap="messageResult" parameterClass="museum">
+	<![CDATA[
+		SELECT /*+ LEADING(A B) */ 
+		       A.MSG_ID, CASE WHEN B.USER_SR_CODE = '002' THEN 'ⓜ' || A.USER_ID || '[@'|| A.WRITER_ID || ']'
+                              ELSE '@' || A.USER_ID
+                         END AS USER_INFO, A.USER_ID, A.REGN_INF_ID, A.MSG_CN, A.REG_DT, A.INFO_ID, A.WRITER_ID,
+               C.USER_IMG, C.OPEN_YN	     
+		FROM   UWFDTB0301 A, UWFDTB0201 B, UWFDTB0201 C
+		WHERE  1=1		
+		AND    A.MSG_ID=#msgId#	
+        AND    A.USER_ID=B.USER_ID	
+        AND    C.USER_ID = A.WRITER_ID		
+		]]>
+	</select>	
+		
+	<insert id="createMuseum" parameterClass="museum">
+	<![CDATA[
+		INSERT INTO UWFDTB0201(USER_ID, USER_PW, USER_NM, USER_SR_CODE, CN, WEB_URL, 
+		                       OPEN_YN, REG_DT, REG_INFO, REGN_INF_ID)
+		            VALUES(#userId#, 'MUSEUM', #userNm#, '002', #cn#, '', #openYn#, 
+		                   TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), '', #regnInfId#)
+		]]>
+	</insert>	
+	
+	<select id="selectMyMuseum" resultMap="mymuseum" parameterClass="string">
+	<![CDATA[
+			SELECT /*+ LEADING(A B C) INDEX(A UWFDTB0101_IX01) */ 
+			       B.USER_ID, B.USER_NM, B.CN, SUBSTR(A.REG_DT,1,8) AS REG_DT, C.LATITUDE, C.LONGITUDE, C.COMPASS
+			FROM   UWFDTB0101 A, UWFDTB0201 B, CDCTCREGNINFO C
+			WHERE  1=1
+			AND    A.SUB_USER_ID=#value#
+			AND    A.MST_USER_ID=B.USER_ID
+			AND    B.USER_SR_CODE='002'
+			AND    B.REGN_INF_ID=C.REGN_INF_ID(+)
+		]]>
+	</select>
+			
+</sqlMap>

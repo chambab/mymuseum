@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryservice>
+	<queries>
+		<!-- ============================== Museum 관련 ============================= -->
+		<!-- Tag 등록 -->
+		<query id="museum.insertTag" isDynamic="true">
+			<statement><![CDATA[
+				INSERT INTO UWFDTB0501(TAG_ID, MSG_ID, TAG_NM, REG_DT)
+				VALUES('T'||LPAD(UWFDTB0501_SEQ_01.NEXTVAL,14,0), :msgId, :tagNm, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
+			]]></statement>
+		</query>
+		
+		<query id="museum.insertTagCode" isDynamic="true">
+			<statement><![CDATA[
+				INSERT INTO CDCTCTAG(TAG_ID, MSG_ID, TAG_NM)
+				VALUES('T'||LPAD(CDCTCTAG_SEQ_01.NEXTVAL,14,0), :msgId, :tagNm)
+			]]></statement>
+		</query>		
+		<query id="museum.insertRegnInfo" isDynamic="true">
+			<statement><![CDATA[
+				INSERT INTO CDCTCREGNINFO(REGN_INF_ID, LATITUDE, LONGITUDE, COMPASS)
+				VALUES(:regnInfId, :latitude, :longitude, :compass)
+			]]></statement>
+		</query>		
+		<query id="museum.selectImgId" isDynamic="true">
+			<statement><![CDATA[
+			SELECT 'I'||LPAD(UWFDTB0401_SEQ_01.NEXTVAL,14,0) AS IMG_ID
+			FROM   DUAL	
+			]]></statement>
+		</query>	
+		<query id="museum.insertProfileImg" isDynamic="true">
+			<statement><![CDATA[
+			UPDATE UWFDTB0201 SET USER_IMG=:userImg
+			WHERE USER_ID=:userId
+			]]></statement>
+		</query>
+		<query id="museum.selectSearchMessageList" isDynamic="true">
+			<statement><![CDATA[	        
+			SELECT MSG_ID,  CASE WHEN USER_SR_CODE='002' THEN 'ⓜ'||USER_ID || '['||WRITER_ID||']'
+	                              WHEN USER_SR_CODE='001' AND USER_ID<>WRITER_ID THEN '@'||USER_ID || '['||WRITER_ID||']'
+			                      ELSE '@'||USER_ID 
+			                 END  AS USER_INFO,
+                    USER_ID, REGN_INF_ID, MSG_CN, REG_DT, INFO_ID, WRITER_ID, VIEW_CNT, USER_IMG, IMG_CNT,
+                   (SELECT COUNT(*)
+                    FROM   UWFDTB0311 E
+                    WHERE  E.MSG_ID=R.MSG_ID) AS RPL_CNT
+			FROM (SELECT /*+ LEADING(A B C) INDEX(A UWFDTB0501_IX01) INDEX(B UWFDTB0301_IX02) INDEX(C UWFDTB0401_PK) USE_NL(C D)*/
+                         B.MSG_ID, B.USER_ID, B.REGN_INF_ID, B.MSG_CN, B.REG_DT, B.INFO_ID, B.WRITER_ID, B.VIEW_CNT,D.USER_IMG,
+                         (SELECT /*+ NO_MERGE INDEX(A UWFDTB0401_IX01) */ COUNT(*)
+                          FROM   UWFDTB0401 E
+                          WHERE  MSG_ID=B.MSG_ID) AS IMG_CNT, C.USER_SR_CODE       
+                  FROM   UWFDTB0501 A, UWFDTB0301 B, UWFDTB0201 C, UWFDTB0201 D
+                  WHERE  A.TAG_NM LIKE  :query ||'%'     
+                  AND    A.MSG_ID=B.MSG_ID                        
+                  AND    B.USER_ID=C.USER_ID
+                  AND    D.USER_ID=(CASE WHEN B.USER_ID=B.WRITER_ID OR B.WRITER_ID IS NULL THEN B.USER_ID
+                                         ELSE B.WRITER_ID
+                                    END)                   
+                  
+			
+			      UNION ALL
+			
+                  SELECT /*+ LEADING(A B) INDEX(A UWFDTB0301_IX01) USE_NL(B C) */
+                       A.MSG_ID, A.USER_ID, A.REGN_INF_ID, A.MSG_CN, A.REG_DT, A.INFO_ID, A.WRITER_ID, A.VIEW_CNT, C.USER_IMG,
+                       (SELECT /*+ NO_MERGE INDEX(A UWFDTB0401_IX01) */ COUNT(*)
+                        FROM   UWFDTB0401 C
+                        WHERE  MSG_ID=A.MSG_ID) AS IMG_CNT, B.USER_SR_CODE
+                  FROM   UWFDTB0301 A, UWFDTB0201 B, UWFDTB0201 C
+                  WHERE  A.USER_ID=:query
+                  AND    A.USER_ID=B.USER_ID
+                  AND    C.USER_ID=(CASE WHEN A.USER_ID=A.WRITER_ID OR A.WRITER_ID IS NULL THEN A.USER_ID
+                                         ELSE A.WRITER_ID
+                                    END)    
+			) R
+			ORDER BY REG_DT DESC             
+			]]></statement>
+		</query>
+		<query id="museum.insertFollow" isDynamic="true">
+			<statement><![CDATA[
+			INSERT INTO UWFDTB0101 VALUES(:mstUserId, :subUserId, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
+			]]></statement>
+		</query>	
+		<query id="museum.getFollow" isDynamic="true">
+			<statement><![CDATA[
+			SELECT MST_USER_ID, SUB_USER_ID, REG_DT
+			FROM   UWFDTB0101
+			WHERE  MST_USER_ID=:mstUserId
+			AND    SUB_USER_ID=:subUserId
+			]]></statement>
+		</query>
+		<query id="museum.deleteFollow" isDynamic="true">
+			<statement><![CDATA[
+			DELETE FROM UWFDTB0101
+			WHERE  MST_USER_ID=:mstUserId
+			AND    SUB_USER_ID=:subUserId
+			]]></statement>
+		</query>
+		<query id="museum.insertImage" isDynamic="true">
+			<statement><![CDATA[
+			INSERT INTO UWFDTB0401(IMG_ID, USER_ID, MSG_ID, IMG_NM, IMG_CN, IMG_URL, REG_DT)
+			VALUES(:imgId, :userId, :msgId, :imgNm, :imgCn, :imgUrl, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
+			]]></statement>
+		</query>	
+		<query id="museum.selectImageList" isDynamic="true">
+			<statement><![CDATA[
+			SELECT A.IMG_ID, A.USER_ID, A.MSG_ID, A.IMG_NM, A.IMG_CN, A.IMG_URL, SUBSTR(A.REG_DT,1,12) AS REG_DT
+			FROM   UWFDTB0401 A
+			WHERE  A.MSG_ID=:msgId
+			]]></statement>
+		</query>
+		<query id="museum.selectMuseumMain" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ LEADING(A B) USE_NL(A B) */ 
+                  A.USER_ID, A.MCNT, B.USER_NM, B.CN
+			FROM (SELECT /*+ NO_MERGE */ 
+			             A.USER_ID, COUNT(*) MCNT
+			      FROM   UWFDTB0201 A, UWFDTB0301 B
+			      WHERE  A.USER_SR_CODE=:userSrCode                  
+			      AND    A.USER_ID=B.USER_ID     
+			      AND    A.OPEN_YN='Y'             
+			      GROUP BY A.USER_ID
+			      HAVING COUNT(*) > 1
+                  ) A, UWFDTB0201 B
+            WHERE A.USER_ID=B.USER_ID
+			ORDER BY MCNT DESC   			  		    		
+			]]></statement>
+		</query>	
+		<query id="museum.selectMyMuseumNPublicMain" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ USE_NL(A B) */
+			       A.USER_ID, A.SE_CODE, A.MCNT, B.USER_NM, B.CN
+			FROM (SELECT A.USER_ID, A.SE_CODE, COUNT(*) AS MCNT
+			      FROM (SELECT /*+ NO_MERGE INDEX(A UWFDTB0201_IX01) */ 
+			                   USER_ID, '002' AS SE_CODE
+			            FROM   UWFDTB0201 A
+			            WHERE  A.USER_SR_CODE='002'
+			            AND    A.OPEN_YN='Y'
+			            MINUS
+			            SELECT /*+ LEADING(A B) INDEX(A UWFDTB0101_IX01) INDEX(B UWFDTB0201_PK) */ 
+			                   USER_ID, '002' AS SE_CODE
+			            FROM   UWFDTB0101 A, UWFDTB0201 B
+			            WHERE  A.SUB_USER_ID=:userId
+			            AND    A.MST_USER_ID=B.USER_ID
+			            AND    B.USER_SR_CODE='002') A, UWFDTB0301 B
+			      WHERE A.USER_ID=B.USER_ID
+			      GROUP BY A.USER_ID, A.SE_CODE
+			      HAVING COUNT(*) > 2
+			
+			      UNION
+			
+			      SELECT /*+ LEADING(A B) INDEX(A UWFDTB0101_IX01) INDEX(B UWFDTB0201_PK) */ 
+			             B.USER_ID, '001' AS SE_CODE,
+			            (SELECT COUNT(*) 
+			             FROM   UWFDTB0301 
+			             WHERE  USER_ID=B.USER_ID) AS MCNT
+			      FROM   UWFDTB0101 A, UWFDTB0201 B
+			      WHERE  A.SUB_USER_ID=:userId
+			      AND    A.MST_USER_ID=B.USER_ID
+			      AND    B.USER_SR_CODE='002') A, UWFDTB0201 B
+			WHERE A.USER_ID=B.USER_ID
+			ORDER BY SE_CODE, MCNT DESC		    		
+			]]></statement>
+		</query>		
+		<query id="museum.selectRealMuseumMain" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ LEADING(A B) USE_NL(A B) */ 
+                  A.USER_ID, A.MCNT, B.USER_NM, B.CN
+			FROM (SELECT /*+ NO_MERGE */ 
+			             A.USER_ID, COUNT(*) MCNT
+			      FROM   UWFDTB0201 A, UWFDTB0301 B
+			      WHERE  A.USER_SR_CODE=:userSrCode
+                  AND    A.USER_ID LIKE '%'||:queryMuseum ||'%'
+			      AND    A.USER_ID=B.USER_ID     
+			      AND    A.OPEN_YN='Y'             
+			      GROUP BY A.USER_ID
+                  ) A, UWFDTB0201 B
+            WHERE A.USER_ID=B.USER_ID
+			ORDER BY MCNT DESC    		    		
+			]]></statement>
+		</query>		
+		<query id="museum.selectFollowMessageList" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ LEADING(A B C) INDEX(A UWFDTB0101_IX01) INDEX(B UWFDTB0301_IX01) 
+			           INDEX(C UWFDTB0201_PK) INDEX(D UWFDTB0201_PK) USE_NL(C D)
+			       */
+			       B.MSG_ID, CASE WHEN C.USER_SR_CODE='002' THEN 'ⓜ'||B.USER_ID || '['||B.WRITER_ID||']'
+	                              WHEN C.USER_SR_CODE='001' AND B.USER_ID<>B.WRITER_ID THEN '@'||B.USER_ID || '['||B.WRITER_ID||']'
+			                      ELSE '@'||B.USER_ID 
+			                 END  AS USER_ID, 
+			       B.REGN_INF_ID, B.MSG_CN, SUBSTR(B.REG_DT,1,12) AS REG_DT, B.INFO_ID, B.WRITER_ID, B.VIEW_CNT,
+			       D.USER_IMG,
+			       (SELECT /*+ NO_MERGE INDEX(A UWFDTB0401_IX01) */ COUNT(*)
+                    FROM   UWFDTB0401 A
+                    WHERE  MSG_ID=B.MSG_ID) AS IMG_CNT,
+                   (SELECT COUNT(*)
+                    FROM   UWFDTB0311 E
+                    WHERE  E.MSG_ID=B.MSG_ID) AS RPL_CNT
+			FROM   UWFDTB0101 A, UWFDTB0301 B, UWFDTB0201 C, UWFDTB0201 D
+			WHERE  A.SUB_USER_ID=:userId
+			AND    A.MST_USER_ID=B.USER_ID
+	        AND    B.USER_ID=C.USER_ID        
+			AND    D.USER_ID=(CASE WHEN B.USER_ID=B.WRITER_ID OR B.WRITER_ID IS NULL THEN B.USER_ID
+	                               ELSE B.WRITER_ID
+	                          END)        
+			ORDER BY B.REG_DT DESC
+			]]></statement>
+		</query>	
+		
+		<query id="museum.selectMyMessageList" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ LEADING(A B C) USE_NL(A B C) INDEX(A UWFDTB0301_IX03) INDEX(B UWFDTB0201_PK) INDEX(C UWFDTB0201_PK) */
+			       A.MSG_ID, CASE WHEN B.USER_SR_CODE='002' THEN 'ⓜ'||A.USER_ID || '['||A.WRITER_ID||']'
+	                              WHEN B.USER_SR_CODE='001' AND A.USER_ID<>A.WRITER_ID THEN '@'||A.USER_ID || '['||A.WRITER_ID||']'
+			                      ELSE '@'||A.USER_ID 
+			                 END  AS USER_ID, 
+	                         A.REGN_INF_ID, A.MSG_CN, SUBSTR(A.REG_DT,1,12) AS REG_DT, A.VIEW_CNT,
+	               A.INFO_ID, C.USER_IMG, A.WRITER_ID,
+	               (SELECT /*+ NO_MERGE INDEX(A UWFDTB0401_IX01) */ COUNT(*)
+                    FROM   UWFDTB0401 D
+                    WHERE  MSG_ID=A.MSG_ID) AS IMG_CNT,
+                   (SELECT COUNT(*)
+                    FROM   UWFDTB0311 E
+                    WHERE  E.MSG_ID=A.MSG_ID) AS RPL_CNT
+			FROM   UWFDTB0301 A, UWFDTB0201 B, UWFDTB0201 C
+			WHERE  1=1
+			AND    A.WRITER_ID=:userId
+			AND    A.USER_ID=B.USER_ID
+			AND    B.OPEN_YN='Y'
+	        AND    C.USER_ID=(CASE WHEN A.USER_ID=A.WRITER_ID OR A.WRITER_ID IS NULL THEN A.USER_ID
+	                               ELSE A.WRITER_ID
+	                          END)  
+			ORDER BY A.REG_DT DESC	
+			]]></statement>
+		</query>	
+		<query id="museum.updateViewCnt" isDynamic="true">
+			<statement><![CDATA[
+			UPDATE UWFDTB0301
+			SET VIEW_CNT = (SELECT TO_NUMBER(NVL(VIEW_CNT,0)) + 1
+			                FROM UWFDTB0301
+			                WHERE MSG_ID=:msgId)
+			WHERE MSG_ID=:msgId
+			]]></statement>
+		</query>
+		<query id="museum.selectMessage" isDynamic="true">
+			<statement><![CDATA[
+			SELECT /*+ LEADING(A B) */ 
+			       A.MSG_ID, CASE WHEN B.USER_SR_CODE = '002' THEN 'ⓜ' || A.USER_ID || '[@'|| A.WRITER_ID || ']'
+	                              ELSE '@' || A.USER_ID
+	                         END AS USER_INFO, A.USER_ID, A.REGN_INF_ID, A.MSG_CN, A.REG_DT, A.INFO_ID, A.WRITER_ID		     
+			FROM   UWFDTB0301 A, UWFDTB0201 B
+			WHERE  1=1		
+			AND    A.MSG_ID=:msgId
+	        AND    A.USER_ID=B.USER_ID	
+			]]></statement>
+		</query>		
+		<query id="museum.insertRplMessage" isDynamic="true">
+			<statement><![CDATA[
+			INSERT INTO UWFDTB0311(RPL_ID, MSG_ID, USER_ID, RPL_MSG_CN, REG_DT)
+			VALUES('L'||LPAD(UWFDTB0311_SEQ_01.NEXTVAL,14,0), :msgId, :userId, :rplMsgCn, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))			
+			]]></statement>
+		</query>	
+		<query id="museum.selectRplMessage" isDynamic="true">
+			<statement><![CDATA[
+			SELECT A.RPL_ID, A.MSG_ID, A.USER_ID, A.RPL_MSG_CN, A.REG_DT, B.USER_IMG
+			FROM   UWFDTB0311 A, UWFDTB0201 B
+			WHERE  A.MSG_ID=:msgId
+			AND    A.USER_ID=B.USER_ID
+			]]></statement>
+		</query>			
+		<query id="museum.selectMyImages" isDynamic="true">
+			<statement><![CDATA[
+			SELECT A.MSG_ID, A.USER_ID, A.REGN_INF_ID, A.WRITER_ID, A.VIEW_CNT, B.IMG_ID, B.IMG_URL, B.REG_DT,
+			       CASE WHEN C.USER_SR_CODE='002' THEN 'ⓜ'||C.USER_ID||'[@'||A.WRITER_ID||']'
+			            WHEN A.USER_ID<>A.WRITER_ID AND C.USER_SR_CODE='001' THEN '@'||A.USER_ID||'[@'||A.WRITER_ID||']'
+			            ELSE '@'||A.WRITER_ID
+			       END AS USER_INFO
+			FROM   UWFDTB0301 A, UWFDTB0401 B, UWFDTB0201 C
+			WHERE  WRITER_ID=:userId
+			AND    A.MSG_ID=B.MSG_ID
+			AND    A.USER_ID=C.USER_ID
+			ORDER BY IMG_ID DESC   		    		
+			]]></statement>
+		</query>
+		<query id="museum.selectMyMuseumImages" isDynamic="true">
+			<statement><![CDATA[
+			SELECT A.MSG_ID, A.USER_ID, A.REGN_INF_ID, A.WRITER_ID, A.VIEW_CNT, B.IMG_ID, B.IMG_URL, B.REG_DT,
+			       CASE WHEN C.USER_SR_CODE='002' THEN 'ⓜ'||C.USER_ID||'[@'||A.WRITER_ID||']'
+			            WHEN A.USER_ID<>A.WRITER_ID AND C.USER_SR_CODE='001' THEN '@'||A.USER_ID||'[@'||A.WRITER_ID||']'
+			            ELSE '@'||A.WRITER_ID
+			       END AS USER_INFO
+			FROM   UWFDTB0301 A, UWFDTB0401 B, UWFDTB0201 C
+			WHERE  A.USER_ID=:userId
+			AND    A.MSG_ID=B.MSG_ID
+			AND    A.USER_ID=C.USER_ID
+			ORDER BY IMG_ID DESC   		    		
+			]]></statement>
+		</query>																											
+	</queries>
+</queryservice>
+
+	
