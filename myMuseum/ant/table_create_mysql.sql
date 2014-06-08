@@ -1,5 +1,9 @@
 
 
+create database myMuseum;
+GRANT ALL PRIVILEGES ON mymuseum.* TO 'mymuseum'@'localhost' identified by 'msmuseum00';
+GRANT ALL PRIVILEGES ON mymuseum.* TO 'mymuseum'@'%' identified by 'msmuseum00';
+
 
 CREATE TABLE CDCTCINFO
 (
