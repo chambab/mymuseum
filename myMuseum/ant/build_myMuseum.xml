@@ -71,9 +71,9 @@
 				<fileset dir="${WAS.SERVLET.DIR}">
 					<include name="**/*.jar" />
 				</fileset>
-				<fileset dir="${WAS.COMMON.DIR}">
+				<!--  dir="${WAS.COMMON.DIR}">
 					<include name="**/*.jar" />
-				</fileset>				
+				</fileset -->				
 				<fileset dir="${JAVA.HOME}">
 					<include name="**/*.jar" />
 				</fileset>				

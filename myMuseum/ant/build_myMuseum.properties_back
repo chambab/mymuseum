@@ -3,13 +3,13 @@
 #Project Name
 
 # WAS
-WAS.SERVLET.DIR = /SW/was2/lib
+WAS.SERVLET.DIR = /home/www/tomcat5.0.28/server
 WAS.COMMON.DIR = /home/www/tomcat5.0.28/common
 WEB.HOME = /SW/tmax/webtob/docs/eureka
 WAS.HOME = /SW/tmax/dev_eureka
 
 # JAVA
-JAVA.HOME = /usr/local/etc/jdk1.6.0_41
+JAVA.HOME = /usr/local/etc/jdk1.6.0_10
 
 # JEUS
 JEUS.HOME = /SW/tmax/jeus6
@@ -24,12 +24,12 @@ TOMCAT.HOME = /home/www/tomcat5.0.28
 
 
 # ROOT.DIR 
-PROJECT.ROOT.WORKSPACE = /home/chambab/mymuseum
+PROJECT.ROOT.WORKSPACE = /home/chambab/hudson/jobs/MYMUSEUM.BUILD/workspace
 PROJECT.NAME = myMuseum
 
 
 # DIST.DIR 
-DIST.WORKSPACE = /APP
+DIST.WORKSPACE = /var/mymuseum/m
 
 DIST.NAME = myMuseum
 
