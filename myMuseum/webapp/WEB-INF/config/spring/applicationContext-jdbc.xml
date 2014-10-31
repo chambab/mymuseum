@@ -34,7 +34,18 @@
 	</bean>
 	 -->
 	
+	<!-- Postsql -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
+	    <property name="driverClassName" value="org.postgresql.Driver"/>	    
+	    <property name="url" value="jdbc:postgresql://www.connectsoft.co.kr:5432/myMuseum"/>
+	    <property name="username" value="chanbab"/>
+	    <property name="password" value="msmuseum2011"/>
+        <property name="maxActive" value="30"/>
+        <property name="maxWait" value="1000"/>	  
+	</bean>
+	 
 	
+	<!-- Oracle
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
 	    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
 	    <property name="url" value="jdbc:oracle:thin:@oracle.chanbab.cafe24.com:1521:orcl"/>
@@ -43,6 +54,7 @@
         <property name="maxActive" value="30"/>
         <property name="maxWait" value="1000"/>	    
 	</bean>
+	 -->
 	
 	 
 	<!--  Oracle Original Configuration 
