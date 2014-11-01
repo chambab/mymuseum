@@ -9,7 +9,7 @@ public class OraclePagingSQLGenerator
     
     sql.append(originalSql);
     
-    sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ BETWEEN ? AND ?");
+    sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ <=? AND ROW_SEQ BETWEEN ? AND ?");
     
 
     return sql.toString();
