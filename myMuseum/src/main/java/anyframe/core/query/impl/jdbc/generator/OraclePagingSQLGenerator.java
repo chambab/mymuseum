@@ -38,13 +38,15 @@ public class OraclePagingSQLGenerator extends AbstractPagingSQLGenerator {
 		// Postgresql 
 		sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ BETWEEN ? AND ?");
 
-		this.setQueryArgs(originalArgs, pageIndex, pageSize);
-		this.setQueryArgTypes(originalArgTypes);
+		setQueryArgs(originalArgs, pageIndex, pageSize);
+		setQueryArgTypes(originalArgTypes);
 		return sql.toString();
 	}
 
-	protected void setQueryArgs(Object[] originalArgs, int pageIndex,
-			int pageSize) {
+	//protected void setQueryArgs(Object[] originalArgs, int pageIndex,
+	//		int pageSize) {
+	public String[] setQueryArgs(Object[] originalArgs, int pageIndex,
+			int pageSize) {		
 		Object[] args = new Object[originalArgs.length + 3];
 
 		for (int i = 0; i < originalArgs.length; i++) {
@@ -59,9 +61,11 @@ public class OraclePagingSQLGenerator extends AbstractPagingSQLGenerator {
 				* pageSize));
 
 		setArgs(args);
+		return null;
 	}
 
-	protected void setQueryArgTypes(int[] originalArgTypes) {
+	//protected void setQueryArgTypes(int[] originalArgTypes) {
+	public int[] setQueryArgTypes(int[] originalArgTypes) {
 		int[] argTypes = new int[originalArgTypes.length + 3];
 
 		for (int i = 0; i < originalArgTypes.length; i++) {
@@ -73,5 +77,8 @@ public class OraclePagingSQLGenerator extends AbstractPagingSQLGenerator {
 		argTypes[originalArgTypes.length + 2] = Types.VARCHAR;
 
 		setArgTypes(argTypes);
+		
+		int[] imsi = new int[0];
+		return imsi;
 	}
 }
