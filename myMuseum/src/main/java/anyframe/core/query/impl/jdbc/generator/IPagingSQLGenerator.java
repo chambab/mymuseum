@@ -60,5 +60,6 @@ public interface IPagingSQLGenerator {
      * @return arguments
      */
     int[] getArgTypes();
-
+    
+    
 }

@@ -38,8 +38,8 @@ public class OraclePagingSQLGenerator extends AbstractPagingSQLGenerator {
 		// Postgresql 
 		sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ BETWEEN ? AND ?");
 
-		setQueryArgs(originalArgs, pageIndex, pageSize);
-		setQueryArgTypes(originalArgTypes);
+		this.setQueryArgs(originalArgs, pageIndex, pageSize);
+		this.setQueryArgTypes(originalArgTypes);
 		return sql.toString();
 	}
 
