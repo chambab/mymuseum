@@ -1,10 +1,16 @@
 package anyframe.core.query.impl.jdbc.generator;
 
 public class OraclePagingSQLGenerator
-  extends AbstractPagingSQLGenerator
+  extends AbstractPagingSQLGeneratorNew
 {
   public String getPaginationSQL(String originalSql, Object[] originalArgs, int[] originalArgTypes, int pageIndex, int pageSize)
   {
+	    //StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROWNUM AS ROW_SEQ FROM ( \n");
+	    
+	    //sql.append(originalSql);
+	    
+	    //sql.append(" ) INNER_TABLE WHERE ROWNUM <= ? )  WHERE ROW_SEQ BETWEEN ? AND ?");
+	    
     StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROW_NUMBER() OVER () AS ROW_SEQ FROM ( \n");
     
     sql.append(originalSql);

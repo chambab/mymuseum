@@ -24,7 +24,7 @@ import java.sql.Types;
  * @author SoYon Lim
  * @author JongHoon Kim
  */
-public class OraclePagingSQLGeneratorNew extends AbstractPagingSQLGenerator {
+public class OraclePagingSQLGeneratorNew extends AbstractPagingSQLGeneratorNew {
 	public String getPaginationSQL(String originalSql, Object[] originalArgs,
 			int[] originalArgTypes, int pageIndex, int pageSize) {
 		//StringBuffer sql = new StringBuffer(
