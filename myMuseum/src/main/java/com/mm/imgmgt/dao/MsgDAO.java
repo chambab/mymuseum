@@ -2,7 +2,6 @@ package com.mm.imgmgt.dao;
 
 import java.util.List;
 
-//import org.anyframe.query.dao.AbstractDao;
 import org.springframework.stereotype.Repository;
 
 import com.mm.core.weave.dao.AbstractIBatisDAO;
