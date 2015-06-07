@@ -5,20 +5,34 @@ public class OraclePagingSQLGenerator
 {
   public String getPaginationSQL(String originalSql, Object[] originalArgs, int[] originalArgTypes, int pageIndex, int pageSize)
   {
-	    //StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROWNUM AS ROW_SEQ FROM ( \n");
+		StringBuffer sql = new StringBuffer(
+				" SELECT * FROM ( SELECT   INNER_TABLE.* , ROW_NUMBER() OVER () AS ROW_SEQ FROM ( \n");
+		sql.append(originalSql);
+
+		sql
+				.append(" ) INNER_TABLE) AA WHERE ROW_SEQ <= ? AND ROW_SEQ BETWEEN ? AND ?");
+
+		setQueryArgs(originalArgs, pageIndex, pageSize);
+		setQueryArgTypes(originalArgTypes);
+		return sql.toString();	  
+	  
+//	    //StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROWNUM AS ROW_SEQ FROM ( \n");
 	    
-	    //sql.append(originalSql);
+//	    //sql.append(originalSql);
 	    
-	    //sql.append(" ) INNER_TABLE WHERE ROWNUM <= ? )  WHERE ROW_SEQ BETWEEN ? AND ?");
+//	    //sql.append(" ) INNER_TABLE WHERE ROWNUM <= ? )  WHERE ROW_SEQ BETWEEN ? AND ?");
 	    
-    StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROW_NUMBER() OVER () AS ROW_SEQ FROM ( \n");
+//    StringBuffer sql = new StringBuffer(" SELECT * FROM ( SELECT   INNER_TABLE.* , ROW_NUMBER() OVER () AS ROW_SEQ FROM ( \n");
     
-    sql.append(originalSql);
+//    sql.append(originalSql);
     
-    sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ <=? AND ROW_SEQ BETWEEN ? AND ?");
+//    //sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ <=? AND ROW_SEQ BETWEEN ? AND ?");
+//    sql.append(" ) INNER_TABLE ) AA WHERE ROW_SEQ BETWEEN ? AND ?");
     
 
-    return sql.toString();
+//    return sql.toString();
+    
+    
   }
   
   public Object[] setQueryArgs(Object[] originalArgs, int pageIndex, int pageSize)
