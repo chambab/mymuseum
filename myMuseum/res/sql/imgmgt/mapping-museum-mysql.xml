@@ -5,15 +5,15 @@
 		<!-- Tag 등록 -->
 		<query id="museum.insertTag" isDynamic="true">
 			<statement><![CDATA[
-				INSERT INTO UWFDTB0501(TAG_ID, MSG_ID, TAG_NM, REG_DT)
-				VALUES('T'||LPAD(UWFDTB0501_SEQ_01.NEXTVAL,14,0), :msgId, :tagNm, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
+				INSERT INTO UWFDTB0501(MSG_ID, TAG_NM, REG_DT)
+				VALUES(:msgId, :tagNm, TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'))
 			]]></statement>
 		</query>
 		
 		<query id="museum.insertTagCode" isDynamic="true">
 			<statement><![CDATA[
 				INSERT INTO CDCTCTAG(TAG_ID, MSG_ID, TAG_NM)
-				VALUES('T'||LPAD(CDCTCTAG_SEQ_01.NEXTVAL,14,0), :msgId, :tagNm)
+				VALUES(:msgId, :tagNm)
 			]]></statement>
 		</query>		
 		<query id="museum.insertRegnInfo" isDynamic="true">
@@ -235,7 +235,7 @@
 		<query id="museum.updateViewCnt" isDynamic="true">
 			<statement><![CDATA[
 			UPDATE UWFDTB0301
-			SET VIEW_CNT = (SELECT CAST((CASE WHEN VIEW_CNT='' THEN 0 END) AS integer) + 1
+			SET VIEW_CNT = (SELECT TO_NUMBER(NVL(VIEW_CNT,0)) + 1
 			                FROM UWFDTB0301
 			                WHERE MSG_ID=:msgId)
 			WHERE MSG_ID=:msgId
