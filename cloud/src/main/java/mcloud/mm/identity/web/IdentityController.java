@@ -29,7 +29,7 @@ public class IdentityController extends BaseController {
 	public @ResponseBody List selectMyMuseumList(@PathVariable String userId) {
 		
 		try {
-			return identityService.selectMyMuseumList(userId);
+			return identityService.selectUserInfo();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,7 +6,7 @@
      
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://www.connectsoft.co.kr/wicloud?autoReconnect=true&amp;useUnicode=true"/>
+        <property name="url" value="jdbc:mysql://m.mymuseum.co.kr/wicloud?autoReconnect=true&amp;useUnicode=true"/>
         <property name="username" value="wicloud"/>
         <property name="password" value="dlatl00"/>
     </bean>

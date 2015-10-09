@@ -15,10 +15,11 @@ public class IdentityService extends AbstractService {
 		this.cmmDAO.selectList("test", map);
 		return null;
 	}
-	public List selectUserInfo(String userId) throws Exception {
+	public List selectUserInfo() throws Exception {
 		
 		Map<String, Object> map = null;
-		this.cmmDAO.selectList("test", map);
-		return null;
+		List<Map<String, Object>> list = null;
+		list = this.cmmDAO.selectList("compute.selectImages", map);
+		return list;
 	}	
 }
