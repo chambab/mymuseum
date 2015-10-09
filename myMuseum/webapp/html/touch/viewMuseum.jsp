@@ -278,7 +278,7 @@
 <tr height='10'><td align='left'>
 <img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png" width="100">
 </td></tr>
-</table>  
+</table>
 </div>
 </body>
 </html>

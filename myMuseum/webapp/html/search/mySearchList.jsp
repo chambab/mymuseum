@@ -14,6 +14,7 @@
 <script type="text/javascript">
 	window.onload = function(){	
 		
+
 		document.getElementById("pageIndex").value = "";	
 		
 		innerlog("log","<img src='<%=request.getContextPath()%>/img/spinner-small.gif'>");	
@@ -48,6 +49,16 @@
 			setParam("query", getParam("query"));
 			location = "<%=request.getContextPath()%>/html/museum/myMuseumImageList.jsp";
 		};		
+ 		//	Follow 추가
+ 		document.getElementById("bntFollow").onclick = function(){
+ 			var subUserId = localStorage.getItem("userId");
+ 			bntE = document.getElementById("bntFollow");
+ 			if(bntE.innerHTML == "Follow"){
+ 				fnInsertFollow(getParam("msgUserId"), subUserId);
+ 			} else {
+ 				fnDeleteFollow(getParam("msgUserId"), subUserId);
+ 			};
+ 		};
 	};
 	function fnloadClick(obj){
 		
@@ -66,6 +77,23 @@
 		var imgCntV = "";
 		var viewCntV = "";	
 		var rplCntV = "";
+		
+        // 사용자여부에 따라서 버튼 수정
+        var subUserId = localStorage.getItem("userId");
+        //setParam("msgUserId", data.userId);
+        
+		// follow 기능 추가
+/*         if(subUserId == data.userId){
+			document.getElementById("menu1").style.display = "none";
+			document.getElementById("menu2").style.display = "block";        	
+        }else{
+        	if(subUserId.length > 0) {
+        		fnIsFollow(data.userId, subUserId);
+        	}
+			document.getElementById("menu1").style.display = "block";
+			document.getElementById("menu2").style.display = "none";	        	
+        }; */
+        
 		
 		for(var i=0; i < obj.length; i++) {
 			if(obj[i].userImg == null || obj[i].userImg.length < 1) {
@@ -96,21 +124,71 @@
 				rplCntV = "re(" + obj[i].rplCnt + ")";
 			} else {
 				rplCntV = "";
-			};			
+			};
 			document.getElementById("msg").innerHTML += 
-				"<table>" +
-                "<tr height='60' class='td_white'><td width='30' align='top'  class='td_list'>" +
-                "<table><tr><td align=center valign=center class='td_img1' width='50' height='50'>" +
-                "<img align='center' src=\'" + obj[i].userImg + "\' width='50'>" +
-                "</td></tr></table>" + 
-                "</td><td width='100%' valign='top' class='td_list'  onclick='javascript:fnViewMessage(\"" + 
+				"<table border=0>" +
+                "<tr height='60' class='td_white' valign=top><td width='30' align='top'  class='td_list'><td>" +
+                "<table border=0><tr><td align=center valign=top class='td_img1' width='50' height='50'>" +
+                "<img valign='top' align='center' src=\'" + obj[i].userImg + "\' width='50'>" +
+                "</td></tr></table></td>" + 
+                "<td width='100%' valign='top' class='td_list'  onclick='javascript:fnViewMessage(\"" + 
         		       obj[i].msgId + "\",\"" + obj[i].userId + "\")'>" +
-                "<table width='100%'><tr><td align=left class='td_info'>" + obj[i].userInfo + "</td><td align='right' class='td_info'>" + fnDay(obj[i].regDt) + "</td></tr></table>" +                        
-                obj[i].msgCn + imgCntV + " " + viewCntV + " " + rplCntV +  "</td></tr><tr><td class='td_white' colspan='2'>" +                        
-                "</td></tr></table>";                       
+                "<table width='100%' border=0>" +
+                "<tr height=35 ><td  align=left class='td_info'>" + obj[i].userInfo + " " + fnDay(obj[i].regDt) + "</td></tr>" +
+                "<tr valign=top ><td>" + obj[i].msgCn + "</td></tr>" + 
+                "<tr height=35><td align=right>" + imgCntV + " " + viewCntV + " " + rplCntV + "</td></tr>" + 
+                "</table><tr></table>";
 		}
-
 	};
+	// Follow 여부확인
+	function fnIsFollow(mstUserId, subUserId){		
+		var strUri = '<%=request.getContextPath()%>/mm/1/rel/' + mstUserId + '/' + subUserId + '/isfollow.json';
+ 		$.ajax({
+			type: 'GET',
+			url:  strUri,									
+			success: function(data){
+				if(data.length > 0) {
+					document.getElementById("bntFollow").innerHTML = "Unfollow"; 
+				} else {
+					document.getElementById("bntFollow").innerHTML = "Follow";
+				}					
+			},
+			error: function(xhr,status,e){       //에러 발생시 처리함수
+				alert('Error');
+			},
+			dataType: 'json'
+		}); 		
+	};
+	// Follow 추가
+	function fnInsertFollow(mstUserId, subUserId){		
+		var strUri = '<%=request.getContextPath()%>/mm/1/rel/' + mstUserId + '/' + subUserId + '/follow.json';
+ 		$.ajax({
+			type: 'GET',
+			url:  strUri,									
+			success: function(data){				
+					document.getElementById("bntFollow").innerHTML = "Unfollow"; 
+			},
+			error: function(xhr,status,e){       //에러 발생시 처리함수
+				alert('Error');
+			},
+			dataType: 'json'
+		}); 		
+	};
+	// UnFollow 추가
+	function fnDeleteFollow(mstUserId, subUserId){		
+		var strUri = '<%=request.getContextPath()%>/mm/1/rel/' + mstUserId + '/' + subUserId + '/unfollow.json';
+ 		$.ajax({
+			type: 'GET',
+			url:  strUri,									
+			success: function(data){				
+					document.getElementById("bntFollow").innerHTML = "Follow"; 
+			},
+			error: function(xhr,status,e){       //에러 발생시 처리함수
+				alert('Error');
+			},
+			dataType: 'json'
+		}); 		
+	};	
 	function fnViewMessage(msgId, userId){		
 				
 		setParam("msgId", msgId);
@@ -128,7 +206,16 @@
 </tr>
 <tr width='100%' height="35" bgcolor='f7f7f7'>		
 	<td valign="left" >&nbsp;&nbsp;&nbsp;<font style='color:#4081c2; font-family:돋움;font-size:15px;'><span id='idDiv'></span></font></td>
-	<td align='right'><button id="btnImg">사진보기 </button></td>		 
+	<td align='right'><button id="btnImg">사진보기 </button></td>
+	<td><table width='100%'>
+		<tr>
+			<td align='right' bgcolor=white>
+			<div id="menu1" style='display:none'>		
+				<button id="bntFollow">Follow</button>
+			</div>
+			</td>
+		</tr>
+		</table></td>		 
 </tr>
 <tr height='1' bgcolor='#eeeeee' width='100%'>
 	<td  colspan='3'></td>
