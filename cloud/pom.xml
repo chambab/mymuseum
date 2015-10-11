@@ -145,6 +145,12 @@
 		<artifactId>commons-dbcp</artifactId>
 		<version>1.4</version>
 	</dependency>   
+	<dependency>
+		<groupId>org.thymeleaf</groupId>
+		<artifactId>thymeleaf-spring3</artifactId>
+		<version>2.1.4.RELEASE</version>
+	</dependency>
+	
   </dependencies>
   <build>
     <finalName>wicloud</finalName>
