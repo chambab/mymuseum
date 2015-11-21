@@ -128,7 +128,7 @@ textarea#styleid:focus{
 	-moz-box-shadow: 0 0 5px rgba(81, 203, 238, 1);
 }
 
-.tweetbox,.searchbox{		
+.tweetbox,.searchbox{	
 	border-bottom:none;
 	color:#215A8C;
 	margin:.0em .2em;
@@ -155,7 +155,8 @@ textarea#txtid{
 	-webkit-border-radius:4px;
 	font-size:15.96px;
 	padding:4px;
-	width:290px
+	/*	width:290px; */
+	width:98%;
 	}	
 
 .td_gray

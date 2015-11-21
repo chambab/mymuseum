@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<style>
+</style>
 <meta charset="UTF-8">
 <meta name="HandheldFriendly" content="True"> 
 <meta name="MobileOptimized" content="320">
@@ -165,7 +167,7 @@
 </head>
 <body leftmargin="0" topmargin="0">	
 <div id=content_write>
-<table cellpadding='0' cellspacing='0' width='100%'>
+<table border=0 cellpadding='0' cellspacing='0' width='100%'>
 <tr height="38" bgcolor='#215A8C'>
 	<td align="left">&nbsp;<img id="btnFind" src="<%=request.getContextPath()%>/img/zoom.png" width="24" height="24"></td>
 	<td align="center"><a href="javascript:fnGohome()"><b><font style='color:white; font-family:돋움;'>나의작은미술관</font></b></a></td>
@@ -174,11 +176,12 @@
 </table>
 <form id="msgForm" name="msgForm">	
 <input type="hidden" id="ouserId" name="writerId">
-<table>
+<table width=100% border=0 style="padding:0px;">
 <tr>
 	<td valign="top">
-	<div class="tweetbox">				
-	<textarea id="txtid" class="tweet_input" name="msgCn" rows="7" cols="44" placeholder="글 등록하기 (Tip. @수신자ID #해쉬태그 $상품명 검색어)" maxlength="3000"></textarea></div>	
+	<div class="tweetbox" style="border: 0px solid red; width: 96%;" align=center>				
+	<textarea id="txtid" class="tweet_input" rows="10"
+	name="msgCn" placeholder="글 등록하기 (Tip. @수신자ID #해쉬태그 $상품명 검색어)" maxlength="3000"></textarea></div>	
 	</td>		
 </tr>
 <tr>

@@ -125,6 +125,8 @@
 			} else {
 				rplCntV = "";
 			};
+			obj[i].msgCn = obj[i].msgCn.replace(/\n/g, "<br>");
+			
 			document.getElementById("msg").innerHTML += 
 				"<table border=0>" +
                 "<tr height='60' class='td_white' valign=top><td width='30' align='top'  class='td_list'><td>" +

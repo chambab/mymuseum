@@ -118,7 +118,7 @@
 			} else {
 				dataR.userImg = "http://" + dataR.userImg;
 			}	
-			
+			dataR.rplMsgCn = dataR.rplMsgCn.replace(/\n/g, "<br>");
         	rplContent = "<table width='100%'><tr><td align='center' width='30' class='td_list'>" +
                          "<table><tr><td align=center valign='top' class='td_img' width='40'>" +
                          "<img src=\'" + dataR.userImg + "\' width='40'></td></tr></table></td>" +
@@ -253,7 +253,9 @@
 <table width='100%'>
 <tr>
 	<td bgcolor='#eeeeee' align='center'>
-		<input type='text' id='replyMsg' name='replyMsg' style='border:0;width:97%;' placeholder='리플(클릭)'>
+		<textarea id="replyMsg"  rows="2"
+			name="replyMsg" placeholder="리플(클릭)" style='border:0;width:97%;' maxlength="3000"></textarea>
+		<!-- input type='text' id='replyMsg' name='replyMsg' style='border:0;width:97%;' placeholder='리플(클릭)' -->
 	</td>
 </tr>
 <tr>
