@@ -1,12 +1,15 @@
-#	2002.09.18 by CHAMBAB
-#	날짜 사용을 위한 Class
-package util;
-public class MyDate
-{
-	public MyDate();
-	public String getToday();  // return YYYYMMDD  오늘 날짜
-	public String getNextDay(String yyyymmdd); 입력한 날짜의 다음날
-	public String getPreDay(String yyyymmdd);  입력한 날짜의 이전날
-	public String getNextDay();  // return yyyymmdd 오늘날짜의 다음날
-	public String getPreDay();    // return yyyymmdd 오늘날짜의 이전날
-}
+
+1. context
+It's automatically decided to myMuseum, but supposed to change it to ROOT 
+'cause of being no consideration of context
+
+2.Should consider which solution you use such as oracle, postgresql, mysql(not supported)
+ - Change the function SYSDATE in Oracle to CURRENT_TIMESTAMP in postgresql 
+
+#fileupload location
+# WebRoot/WEB-INF/classes/context.properties 
+
+
+# verification
+/WEB-INF/config/ibatis/sql-map-config.xml
+/res/imgmgt/mapping-/mapping_ based on spring/applicationContext-query.xml

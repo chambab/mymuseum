@@ -3,6 +3,6 @@
     "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
 
 <sqlMapConfig>
-    <sqlMap resource="com/mm/user/model/User.xml"/>
-    <sqlMap resource="com/mm/imgmgt/model/Museum.xml"/>
+    <sqlMap resource="com/mm/user/model/User_postgres.xml"/>
+    <sqlMap resource="com/mm/imgmgt/model/Museum_postgres.xml"/>
 </sqlMapConfig>
