@@ -86,15 +86,19 @@ public class MsgService  extends AbstractService {
 				imgMap.put("imgUrl", museum.getImgUrl().get(i));
 				i++;
 				
+				// postgresql
 				this.cmmDAO.modify("museum.insertImage", imgMap);
 				imgParamList.add(imgMap);
 			}
+			// oracle
 			//this.cmmDAO.batchUpdate("museum.insertImage", imgParamList);
 			
 		}
 		
+		// oracle
 		//this.cmmDAO.batchUpdate("museum.insertTag", paramList);
 		for(int j=0; j < paramList.size(); j++) {
+			// postgresql
 			this.cmmDAO.modify("museum.insertTag", paramList.get(j));
 			
 		}
