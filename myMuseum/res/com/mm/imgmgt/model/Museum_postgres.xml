@@ -41,7 +41,7 @@
 	<![CDATA[
 		INSERT INTO UWFDTB0301(MSG_ID, USER_ID, REGN_INF_ID, MSG_CN, REG_DT, INFO_ID, WRITER_ID)
 		SELECT #msgId#, #userId#, ' ', #msgCn#,
-		        TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),'', #writerId#	                   
+		        TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS'),'', #writerId#	                   
 		]]>
 	</insert>	
 	
@@ -119,7 +119,7 @@
 		INSERT INTO UWFDTB0201(USER_ID, USER_PW, USER_NM, USER_SR_CODE, CN, WEB_URL, 
 		                       OPEN_YN, REG_DT, REG_INFO, REGN_INF_ID)
 		            VALUES(#userId#, 'MUSEUM', #userNm#, '002', #cn#, '', #openYn#, 
-		                   TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), '', #regnInfId#)
+		                   TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS'), '', #regnInfId#)
 		]]>
 	</insert>	
 	

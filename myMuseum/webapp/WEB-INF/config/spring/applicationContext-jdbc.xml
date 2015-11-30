@@ -37,7 +37,7 @@
 	<!-- Postsql -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
 	    <property name="driverClassName" value="org.postgresql.Driver"/>	    
-	    <property name="url" value="jdbc:postgresql://m.mymuseum.co.kr:5432/myMuseum"/>
+	    <property name="url" value="jdbc:postgresql://m.mymuseum.co.kr:6789/myMuseum"/>
 	    <property name="username" value="chanbab"/>
 	    <property name="password" value="msmuseum2011"/>
         <property name="maxActive" value="30"/>

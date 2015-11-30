@@ -234,7 +234,7 @@
 		<query id="museum.updateViewCnt" isDynamic="true">
 			<statement><![CDATA[
 			UPDATE UWFDTB0301
-			SET VIEW_CNT = (SELECT CAST((CASE WHEN VIEW_CNT='' THEN 0 END) AS integer) + 1
+			SET VIEW_CNT = (SELECT CAST((CASE WHEN VIEW_CNT IS NULL THEN 0 END) AS integer) + 1
 			                FROM UWFDTB0301
 			                WHERE MSG_ID=:msgId)
 			WHERE MSG_ID=:msgId
