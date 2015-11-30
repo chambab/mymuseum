@@ -52,7 +52,7 @@
 	</select>	
 	<select id="selectRegnId" resultMap="regnId">
 	<![CDATA[
-		SELECT 'R'||LPAD(CAST(NEXTVAL('CDCTCREGNINFO_SEQ_01) AS TEXT),14,'0') AS REGN_INF_ID
+		SELECT 'R'||LPAD(CAST(NEXTVAL('CDCTCREGNINFO_SEQ_01') AS TEXT),14,'0') AS REGN_INF_ID
 		]]>
 	</select>	
 	
