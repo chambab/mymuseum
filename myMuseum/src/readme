@@ -13,3 +13,6 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 # verification
 /WEB-INF/config/ibatis/sql-map-config.xml
 /res/imgmgt/mapping-/mapping_ based on spring/applicationContext-query.xml
+
+# clear classes before compiling the java
+# ant -f ./build_myMuseum.xml build.here

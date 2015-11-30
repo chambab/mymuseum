@@ -255,7 +255,7 @@
 		<query id="museum.insertRplMessage" isDynamic="true">
 			<statement><![CDATA[
 			INSERT INTO UWFDTB0311(RPL_ID, MSG_ID, USER_ID, RPL_MSG_CN, REG_DT)
-			VALUES('L'||LPAD(UWFDTB0311_SEQ_01.NEXTVAL,14,0), :msgId, :userId, :rplMsgCn, TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS'))			
+			VALUES('L'||LPAD(CAST(NEXTVAL('UWFDTB0311_SEQ_01') AS TEXT), 14, '0'), :msgId, :userId, :rplMsgCn, TO_CHAR(CURRENT_TIMESTAMP, 'YYYYMMDDHH24MISS'))			
 			]]></statement>
 		</query>	
 		<query id="museum.selectRplMessage" isDynamic="true">
