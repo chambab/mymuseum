@@ -146,6 +146,8 @@
 	
 	<target name="build.all" depends="init, build" />
 	
+	<target name="build.here" depends="init, build, deploy.was" />
+	
 	<target name="build.deploy" depends="init, build, deploy.was, deploy.remote" />
 	
 </project>
