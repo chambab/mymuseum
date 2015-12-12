@@ -180,7 +180,7 @@
 </script>
 </head>
 <body style="background-image:url('/img/bg/bg16.jpg')">
-<div id="content">
+<div id="content" style="border: 0px solid #ccc;">
 <table width='100%' height='600'
        cellpadding='1' cellspacing='5' bgcolor='#eeeeee' style="background:rgba(255,255,255,0.2)">     
 <tr><td align='center' valign='top'>

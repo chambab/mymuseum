@@ -199,28 +199,31 @@
 	};
 </script>
 </head>
-<body leftmargin='0' topmargin='0'>
-<div id="content">
-<table cellpadding='0' cellspacing='0' width='100%'>
-<tr height="38" bgcolor='#215A8C'>
-	<td align="left" valign='center'>&nbsp;<a href="javascript:fnGohome()"><img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png" width="110"></a></td>	
-	<td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td>
+<body leftmargin='0' topmargin='4'>
+<div id="content" style="border: 1px solid #ccc;">
+<table cellpadding='0' cellspacing='0' width='100%' border="0" sytle="border-radius: 7px;">
+<tr height="38" bgcolor="#215A8C" class="tophead">
+	<td colspan='2' align="left" valign='center'>&nbsp;<a href="javascript:fnGohome()"><img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png" width="110"></a></td>	
+	<!--  td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td -->
 </tr>
-<tr width='100%' height="35" bgcolor='f7f7f7'>		
-	<td valign="left" >&nbsp;&nbsp;&nbsp;<font style='color:#4081c2; font-family:돋움;font-size:15px;'><span id='idDiv'></span></font></td>
-	<td align='right'><button id="btnImg">사진보기 </button></td>
-	<td><table width='100%'>
+<tr width='100%' height="35" bgcolor='f7f7f7'>	
+	<td valign="left" >&nbsp;&nbsp;&nbsp;<font style='color:#4081c2; font-family:verdana,돋움;font-size:14px;'><span id='idDiv'></span></font></td>
+	<td align="right" valign="center">
+		<!-- table border="1" style="overflow:auto;">
 		<tr>
 			<td align='right' bgcolor=white>
-			<div id="menu1" style='display:none'>		
+			<div id="menu1" style='display:none;'>		
 				<button id="bntFollow">Follow</button>
 			</div>
 			</td>
 		</tr>
-		</table></td>		 
+		</table -->
+	<button id="btnImg"><font style='font-family:verdana;font-size:14px;'>Photo</font></button>
+	<button id="btnNew"><font style='font-family:verdana;font-size:14px;'>Write</font></button>
+	</td>		 
 </tr>
 <tr height='1' bgcolor='#eeeeee' width='100%'>
-	<td  colspan='3'></td>
+	<td  colspan='2'></td>
 </tr>
 </table>
 <div id="msg"></div><br>

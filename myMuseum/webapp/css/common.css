@@ -82,7 +82,21 @@ button:disabled {
     background:rgba(220,220,220,1);
 }
 
-#content {width:100%; max-width:600px; margin:0% auto 0;}
+#content {
+	width:100%; 
+	max-width:600px; 
+	margin:0% auto 0;
+	border-radius: 5px;
+	border: 1px solid #eeeeee;
+}
+.tophead {
+	height: 50px;
+    background: #215A8C; /* For browsers that do not support gradients */    
+    background: -webkit-linear-gradient(left, #215A8C , blue); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #215A8C, blue); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #215A8C, blue); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #215A8C , blue); /* Standard syntax (must be last) */	
+}
 #content_write {width:100%; max-width:600px; margin:0% auto 0; background:#fefefe;}
 
 
