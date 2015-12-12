@@ -63,7 +63,7 @@
 		<mkdir dir="${project.root}/webapp/WEB-INF/classes" />		
 		<javac destdir="${project.root}/webapp/WEB-INF/classes" 
 			   srcdir="${project.root}/src/main/java" 
-			   target="1.6" debug="true" deprecation="false" encoding="utf-8">
+			   target="1.8" debug="true" deprecation="false" encoding="utf-8">
 			<classpath>
 				<fileset dir="${project.root}/webapp/WEB-INF/lib">
 					<include name="*.jar" />
