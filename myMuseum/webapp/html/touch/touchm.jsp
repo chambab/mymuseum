@@ -103,7 +103,7 @@
 				var obj = JSON.parse(xhr.responseText); 
 				var msg = "<table width='100%'><tr class='td_white'><td width='100' align=center  class='td_img'>" + 
 					      "<img src='http://" + obj.imgUrl + "' width='100'></td>" +
-				          "<td align=left valign='top'  class='td_info'>" + obj.imgUrl + "<br><input type='text' name='imgId' value='" + obj.imgId + "' width='50' style='border:0;width:80px' readonly='readonly'></td>" +
+				          "<td align=left valign='top'  class='td_info'>" + obj.imgNm + " - <input type='text' name='imgId' value='" + obj.imgId + "' width='100' style='border:0;width:160px; font-size:10px;' readonly='readonly'></td>" +
 				          "</tr></table>";
 				var divFileMsg = "<input type='hidden' name='imgUrl' value='" + obj.imgUrl + "' style='border:0;width:0px' readonly='readonly'>" +
 				                 "<input type='hidden' name='imgId' value='" + obj.imgId + "' style='border:0;width:0px' readonly='readonly'>";
@@ -166,22 +166,23 @@
 </script>
 </head>
 <body leftmargin="0" topmargin="0">	
-<div id=content_write>
+<div id="content" style="border: 0px solid #ccc;" >
 <table border=0 cellpadding='0' cellspacing='0' width='100%'>
-<tr height="38" bgcolor='#215A8C'>
-	<td align="left">&nbsp;<img id="btnFind" src="<%=request.getContextPath()%>/img/zoom.png" width="24" height="24"></td>
-	<td align="center"><a href="javascript:fnGohome()"><b><font style='color:white; font-family:돋움;'>나의작은미술관</font></b></a></td>
-	<td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td>
+<tr bgcolor='#215A8C' class="tophead">
+	<td colspan='2' align="left" valign='center'>&nbsp;<a href="javascript:fnGohome()"><img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png" width="110"></a></td>
+	<!-- td align="left">&nbsp;<img id="btnFind" src="<%=request.getContextPath()%>/img/zoom.png" width="24" height="24"></td -->
+	<!--  td align="center"><a href="javascript:fnGohome()"><b><font style='color:white; font-family:돋움;'>나의작은미술관</font></b></a></td>
+	<td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td -->
 </tr>
 </table>
 <form id="msgForm" name="msgForm">	
 <input type="hidden" id="ouserId" name="writerId">
-<table width=100% border=0 style="padding:0px;">
+<table width=100% border=0 style="padding:0px;" bgcolor=#eeeeee>
 <tr>
 	<td valign="top">
 	<div class="tweetbox" style="border: 0px solid red; width: 96%;" align=center>				
 	<textarea id="txtid" class="tweet_input" rows="10"
-	name="msgCn" placeholder="글 등록하기 (Tip. @수신자ID #해쉬태그 $상품명 검색어)" maxlength="3000"></textarea></div>	
+	name="msgCn" placeholder="글 등록하기 (Tip. @수신자ID #해쉬태그 $상품명 검색어)" maxlength="3500"></textarea></div>	
 	</td>		
 </tr>
 <tr>

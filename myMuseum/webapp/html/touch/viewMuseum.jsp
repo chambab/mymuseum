@@ -218,13 +218,13 @@
 	};
 </script>
 </head>
-<body  bgcolor='white' leftmargin='0' topmargin='4'>
-<div id="content" style="border: 1px solid #ccc;" >	
+<body  bgcolor='white' leftmargin='0' topmargin='0'>
+<div id="content" style="border: 0px solid #ccc;" >	
 <table cellpadding='0' cellspacing='0' width='100%' sytle="border-radius: 7px;">
 <tr height="38"  class="tophead">
 	<td align="left">&nbsp;<img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png"  width="110"></td>
-	<td align="left"><a href="javascript:fnGohome()"><b><font style='color:white; font-family:돋움;'>나의작은미술관</font></b></a></td>
-	<td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td>
+	<!-- td align="left"><a href="javascript:fnGohome()"><b><font style='color:white; font-family:돋움;'>나의작은미술관</font></b></a></td -->
+	<!-- td align="right"><img id="btnNew" src="<%=request.getContextPath()%>/img/edit.png" width="24" height="24">&nbsp;</td -->
 </tr>
 </table>
 <table><tr height='1'></tr></table>

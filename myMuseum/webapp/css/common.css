@@ -90,7 +90,7 @@ button:disabled {
 	border: 1px solid #eeeeee;
 }
 .tophead {
-	height: 50px;
+	height: 30px;
     background: #215A8C; /* For browsers that do not support gradients */    
     background: -webkit-linear-gradient(left, #215A8C , blue); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(right, #215A8C, blue); /* For Opera 11.1 to 12.0 */

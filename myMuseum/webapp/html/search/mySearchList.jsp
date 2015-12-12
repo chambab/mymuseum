@@ -128,7 +128,7 @@
 			obj[i].msgCn = obj[i].msgCn.replace(/\n/g, "<br>");
 			
 			document.getElementById("msg").innerHTML += 
-				"<table border=0>" +
+/* 				"<table border=0>" +
                 "<tr height='60' class='td_white' valign=top><td width='30' align='top'  class='td_list'><td>" +
                 "<table border=0><tr><td align=center valign=top class='td_img1' width='50' height='50'>" +
                 "<img valign='top' align='center' src=\'" + obj[i].userImg + "\' width='50'>" +
@@ -139,7 +139,18 @@
                 "<tr height=35 ><td  align=left class='td_info'>" + obj[i].userInfo + " " + fnDay(obj[i].regDt) + "</td></tr>" +
                 "<tr valign=top ><td>" + obj[i].msgCn + "</td></tr>" + 
                 "<tr height=35><td align=right>" + imgCntV + " " + viewCntV + " " + rplCntV + "</td></tr>" + 
-                "</table><tr></table>";
+                "</table><tr></table>"; */
+				"<table>" +
+	            "<tr height='60' class='td_white'><td width='30' align='top'  class='td_list'>" +
+	            "<table><tr><td align=center valign=center class='td_img1' width='50' height='50'>" +
+	            "<img align='center' src=\'" + obj[i].userImg + "\' width='50'>" +
+	            "</td></tr></table>" + 
+	            "</td><td width='100%' valign='top' class='td_list'  onclick='javascript:fnViewMessage(\"" + 
+	                   obj[i].msgId + "\",\"" + obj[i].userId + "\")'>" +
+	            "<table width='100%'><tr><td align=left class='td_info'>" + obj[i].userInfo + "</td><td align='right' class='td_info'>" + fnDay(obj[i].regDt) + "</td></tr></table>" +                        
+	            obj[i].msgCn + imgCntV + " " + viewCntV + " " + rplCntV +  "</td></tr><tr><td class='td_white' colspan='2'>" +                        
+	            "</td></tr></table>";
+            
 		}
 	};
 	// Follow 여부확인
@@ -199,8 +210,8 @@
 	};
 </script>
 </head>
-<body leftmargin='0' topmargin='4'>
-<div id="content" style="border: 1px solid #ccc;">
+<body leftmargin='0' topmargin='0'>
+<div id="content" style="border: 0px solid #ccc;">
 <table cellpadding='0' cellspacing='0' width='100%' border="0" sytle="border-radius: 7px;">
 <tr height="38" bgcolor="#215A8C" class="tophead">
 	<td colspan='2' align="left" valign='center'>&nbsp;<a href="javascript:fnGohome()"><img id="btnFind" src="<%=request.getContextPath()%>/img/mymuseum.png" width="110"></a></td>	
@@ -218,8 +229,8 @@
 			</td>
 		</tr>
 		</table -->
-	<button id="btnImg"><font style='font-family:verdana;font-size:14px;'>Photo</font></button>
-	<button id="btnNew"><font style='font-family:verdana;font-size:14px;'>Write</font></button>
+	<button id="btnImg"><font style='font-family:verdana;font-size:14px;'>그림으로보기</font></button>
+	<button id="btnNew"><font style='font-family:verdana;font-size:14px;'>글쓰기</font></button>
 	</td>		 
 </tr>
 <tr height='1' bgcolor='#eeeeee' width='100%'>
