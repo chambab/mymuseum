@@ -3,7 +3,7 @@ package com.util;
 /**
  * �� Ŭ������ <strong>���� ��ƿ��Ƽ Method</strong>�� �����ϴ� Ŭ�����̴�.
  * <BR>
- * @author 	Samsung SDS / Information Service Team
+ * @author 	
  * @version	1.0
  * @since 2003.10.23
  */
