@@ -3,7 +3,7 @@ package mcloud.mm.core.weave.utils;
 /**
  * �� Ŭ������ <strong>���� ��ƿ��Ƽ Method</strong>�� �����ϴ� Ŭ�����̴�.
  * <BR>
- * @author 	Samsung SDS / Information Service Team
+ * @author 	
  * @version	1.0
  * @since 2003.10.23
  */
@@ -29,7 +29,7 @@ public class CommonUtil {
 	   /** 
 		* String Ŭ������ ���� �����ϴ����� üũ 
 		* @param  String Empty���� üũ�� String
-		* @return boolean(true : null �Ǵ� �� ��Ʈ����ü, false : true �̿��� ���?
+		* @return boolean(true : null �Ǵ� �� ��Ʈ����ü, false : true �̿��� ���?
 		*/
 	   public static boolean isEmptyString(String arg1) {
 		  if(arg1 == null || arg1.length() == 0) return true;
@@ -37,9 +37,9 @@ public class CommonUtil {
 	   }
 
 	   /** 
-		* String�� ���� null�ΰ��?Empty String�� ���� 
+		* String�� ���� null�ΰ��?Empty String�� ���� 
 		* @param  String Source String
-		* @return arg1�� null�� ���?Empty String�� ����
+		* @return arg1�� null�� ���?Empty String�� ����
 		*/
 	   public static String getNotNullString(String arg1) {
 		  if(arg1 == null) return "";
@@ -47,11 +47,11 @@ public class CommonUtil {
 	   }
 
 	   /** Object�� Length�� Return�Ѵ�.
-		*  String �Ǵ� StringBuffer�� ���?: length() ����
-		*  List �Ǵ� Map�� ���?size() ����
-		*  Array�� ���?length ����
-		*  null �ΰ��?0�� ����
-		*  �� �̿��� ���?1�� ����
+		*  String �Ǵ� StringBuffer�� ���?: length() ����
+		*  List �Ǵ� Map�� ���?size() ����
+		*  Array�� ���?length ����
+		*  null �ΰ��?0�� ����
+		*  �� �̿��� ���?1�� ����
 		*/
 	   public static int getLength(Object obj) throws Exception {
 		  if(obj == null) {
@@ -127,7 +127,7 @@ public class CommonUtil {
 		  return getDateFormat("yyyyMMddHHmmss");
 	   }
 	   
-		/** �������?�ֱٺб����?MM Format���� ���� */
+		/** �������?�ֱٺб����?MM Format���� ���� */
 		public static String getQuarterMonth(String strMonth) throws Exception {
 			String rtnMonth  = new String();
 			if(strMonth.equals("12")||strMonth.equals("01")||strMonth.equals("02")) rtnMonth="12";
@@ -140,7 +140,7 @@ public class CommonUtil {
 	   /** ���糯¥�ð��� milliseconds �� ���� */
 	   
 	   /** '-'�� ���е� ��ȭ��ȣ�� '-'�� ������ 4���� String Array�� �����Ѵ�.
-		*  Token�� ������ ���?�������� �����Ͽ� Array�� ä���?
+		*  Token�� ������ ���?�������� �����Ͽ� Array�� ä���?
 		*/
 	   public static String[] split4PhoneNumber(String strphone) {
 		  int fieldlen = 4;
@@ -156,12 +156,12 @@ public class CommonUtil {
 		  return rtnStr;
 	   }
 
-	   /** StringBuffer�� �ִ� ���� New Line�� �ش�Ǵ�?���� �����?		* @param  java.lang.StringBuffer
+	   /** StringBuffer�� �ִ� ���� New Line�� �ش�Ǵ�?���� �����?		* @param  java.lang.StringBuffer
 		* @return void
 		* @exception Exception
 		*/
 	   public static void removeNewLine(StringBuffer sb) throws Exception {
-		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
+		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
 
 		  char ch;
 		  int i, sblen = sb.length();
@@ -178,7 +178,7 @@ public class CommonUtil {
 	   }
    
 	   /**
-		* String�� �ִ� ���� New Line�� �ش�Ǵ�?���� �����?		* @param  String
+		* String�� �ִ� ���� New Line�� �ش�Ǵ�?���� �����?		* @param  String
 		* @return String
 		*/
 	   public static String removeNewLine(String s)
@@ -197,7 +197,7 @@ public class CommonUtil {
 	   }
 
 	   /**
-		* String�� �ִ� ���� (',", ,-,_)�� �ش�Ǵ�?���� �����?		* @param  String
+		* String�� �ִ� ���� (',", ,-,_)�� �ش�Ǵ�?���� �����?		* @param  String
 		* @return String
 		*/
 	   public static String removeSearchSpacialChars(String s)
@@ -224,13 +224,13 @@ public class CommonUtil {
 
 
 	   /** 
-		* StringBuffer�� �ִ� ���� New Line�� �ش�Ǵ�?�� <BR>�� ����
+		* StringBuffer�� �ִ� ���� New Line�� �ش�Ǵ�?�� <BR>�� ����
 		* @param java.lang.StringBuffer
 		* @return void
 		* @exception Exception
 		*/
 	   public static void convertNewLine(StringBuffer sb) throws Exception {
-		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
+		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
 
 		  char ch;
 		  int i, sblen = sb.length();
@@ -324,9 +324,9 @@ public class CommonUtil {
 	   }
 
 	   /**
-	   * \n, \r ���� <br>�ױ׷� �����Ų��?<br>
-	   * @param comment  ������?���ڿ�
-	   * @return String  �����?���ڿ�
+	   * \n, \r ���� <br>�ױ׷� �����Ų��?<br>
+	   * @param comment  ������?���ڿ�
+	   * @return String  �����?���ڿ�
 	   */
 	   public static String toBr(String comment) {
 		  if( comment==null || comment.equals("") || comment.equals(null) ) {
@@ -375,7 +375,7 @@ public class CommonUtil {
 	   }
 	   /** textarea�� ǥ���ϱ� ���� ������ �����Ͽ� ����  */
 	   public static void convertNewLine_Textarea(StringBuffer sb) throws Exception {
-			 if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
+			 if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
 
 			 char ch;
 			 int i, sblen = sb.length();
@@ -424,8 +424,8 @@ public class CommonUtil {
 		* Request ��ü�� ���Ե� ��Ű�� name�� ��ġ�ϴ� �Ѱ��� String���� �������ش�
 		*/
 	   public static String getCookie(javax.servlet.http.HttpServletRequest request, String name) throws Exception {
-		  if(request == null) throw new Exception("HttpServletRequest �Ķ���Ͱ�?Null �Դϴ�");
-		  if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
+		  if(request == null) throw new Exception("HttpServletRequest �Ķ���Ͱ�?Null �Դϴ�");
+		  if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
 
 		String value = "";
 		javax.servlet.http.Cookie[] cook = request.getCookies();
@@ -450,8 +450,8 @@ public class CommonUtil {
 	 * @throws Exception
 	 */
 //	public static void setCookie(HttpServletResponse response, String name, String value) throws Exception {
-//	   	if(response == null) throw new Exception("HttpServletResponse �Ķ���Ͱ�?Null �Դϴ�");
-//	   	if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
+//	   	if(response == null) throw new Exception("HttpServletResponse �Ķ���Ͱ�?Null �Դϴ�");
+//	   	if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
 //
 //		Cookie cookie = new Cookie(name, value);
 //		cookie.setMaxAge(-1);
@@ -466,8 +466,8 @@ public class CommonUtil {
 	 * @throws Exception
 	 */
 //	public static void removeCookie(HttpServletResponse response, String name) throws Exception {
-//	if(response == null) throw new Exception("HttpServletResponse �Ķ���Ͱ�?Null �Դϴ�");
-//	if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
+//	if(response == null) throw new Exception("HttpServletResponse �Ķ���Ͱ�?Null �Դϴ�");
+//	if(name == null) throw new Exception("��Ű�� �Ķ���Ͱ�?Null �Դϴ�");
 //	Cookie cookie = new Cookie(name, "");
 //	cookie.setMaxAge(0);
 //	response.addCookie(cookie);
@@ -480,7 +480,7 @@ public class CommonUtil {
 		* @exception Exception
 		*/
 	   public static void autoLine(StringBuffer sb, int len) throws Exception {
-		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
+		  if(sb == null) throw new Exception("StringBuffer �Ķ����?����(Null)");
 
 		  char ch;
 		  int i, sblen = sb.length();
@@ -496,9 +496,9 @@ public class CommonUtil {
 	   /** 
 		* 2���� ArrayList�� int������ ũ�� ���� Method�� ���ؼ� ������ 
 		* ���� �� �����Ͽ� �ΰ��� ArrayList�� ���Ѵ�.
-		* @param ArrayList ù��° ���Ĵ��?ArrayList
-		* @param ArrayList �ι�° ���Ĵ��?ArrayList
-		* @param Object ArrayList�� �����ϴ� �񱳴��?class
+		* @param ArrayList ù��° ���Ĵ��?ArrayList
+		* @param ArrayList �ι�° ���Ĵ��?ArrayList
+		* @param Object ArrayList�� �����ϴ� �񱳴��?class
 		* @param String ũ�� ���� Method��
 		* @return ���� ���ĵǿ� �Ѱ��� ������ ArrayList
 		* @exception Exception
@@ -539,11 +539,11 @@ public class CommonUtil {
 		  return prvlist;
 	   }
 	   /**
-		* Object���� ������ Method�� ȣ���Ͽ� �� ���?return�Ѵ�.
+		* Object���� ������ Method�� ȣ���Ͽ� �� ���?return�Ѵ�.
 		* ��, ���� int ���� ���� �����Ѵ�.
 		* @param  Object ���� ȣ���� Object
 		* @param  String Object���� ȣ���� Method��
-		* @return ȣ���?���?�� int
+		* @return ȣ���?���?�� int
 		*/
 	   public static int getObjSeqValue(Object obj, String methodName) {
 		  int iRtn = -1;
@@ -574,8 +574,8 @@ public class CommonUtil {
 	}
 	
 	/**
-	   * parameter�� �Ѿ��?string������ null�̸�
-	   * �����?string���� �ѱ��?
+	   * parameter�� �Ѿ��?string������ null�̸�
+	   * �����?string���� �ѱ��?
 	   <br> Usage : UtilFormat.replaceNull(value);
    
 		 @param value nulltrim �� �ϰ��� �ϴ� value
@@ -589,8 +589,8 @@ public class CommonUtil {
 	}
 
   /**
-   * parameter�� �Ѿ��?long������ null�̸�
-   * �����?string���� �ѱ��?
+   * parameter�� �Ѿ��?long������ null�̸�
+   * �����?string���� �ѱ��?
 	 @param value nulltrim �� �ϰ��� �ϴ� value
 	 @return long nulltrim �� value
    */        
@@ -603,8 +603,8 @@ public class CommonUtil {
 		}
    
 	  /**
-   * parameter�� �Ѿ��?long������ null�̸�
-   * �����?string���� �ѱ��?
+   * parameter�� �Ѿ��?long������ null�̸�
+   * �����?string���� �ѱ��?
 	 @param value nulltrim �� �ϰ��� �ϴ� value
 	 @return long nulltrim �� value
    */        
@@ -617,8 +617,8 @@ public class CommonUtil {
 		}
    
 	  /**
-   * parameter�� �Ѿ��?double������ null�̸�
-   * �����?string���� �ѱ��?
+   * parameter�� �Ѿ��?double������ null�̸�
+   * �����?string���� �ѱ��?
 	 @param value nulltrim �� �ϰ��� �ϴ� value
 	 @return double nulltrim �� value
    */   
