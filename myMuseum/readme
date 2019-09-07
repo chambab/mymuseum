@@ -22,5 +22,5 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 # clear classes before compiling the java
 # ant -f ./build_myMuseum.xml build.here
 
-2. test
-beanstalk test
+2. Dockerize
+jar -cvf myMuseum.war ./myMuseum/*
