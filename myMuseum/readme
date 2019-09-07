@@ -28,3 +28,5 @@ jar -cvf myMuseum.war ./myMuseum/*
 sed -i "s/WAS.SERVLET.DIR = \/SW\/was2\/lib/WAS.SERVLET.DIR = \/usr\/local\/tomcat\/lib/g" ./myMuseum/ant/build_myMuseum.properties
 sed -i "s/JAVA.HOME = \/usr\/local\/etc\/jdk1.8.0_65/JAVA.HOME = \/usr\/local\/openjdk-8/g" ./myMuseum/ant/build_myMuseum.properties
 sed -i "s/PROJECT.ROOT.WORKSPACE = \/DIST\/mymuseum/PROJECT.ROOT.WORKSPACE = \/usr\/local\/tomcat\/test/g" ./myMuseum/ant/build_myMuseum.properties
+
+docker build -t chambab/tomcat8-ant -f ./dockerfile_tomcat8 .
