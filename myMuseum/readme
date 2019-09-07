@@ -23,3 +23,4 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 # ant -f ./build_myMuseum.xml build.here
 
 2. test
+beanstalk test
