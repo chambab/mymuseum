@@ -5,14 +5,14 @@ mkdir -p /APP
 
 
 1. context
-It's automatically decided to myMuseum, but supposed to change it to ROOT 
+It's automatically decided to myMuseum, but supposed to change it to ROOT
 'cause of being no consideration of context
 
 2.Should consider which solution you use such as oracle, postgresql, mysql(not supported)
- - Change the function SYSDATE in Oracle to CURRENT_TIMESTAMP in postgresql 
+ - Change the function SYSDATE in Oracle to CURRENT_TIMESTAMP in postgresql
 
 #fileupload location
-# WebRoot/WEB-INF/classes/context.properties 
+# WebRoot/WEB-INF/classes/context.properties
 
 
 # verification
@@ -21,3 +21,5 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 
 # clear classes before compiling the java
 # ant -f ./build_myMuseum.xml build.here
+
+2. test
