@@ -1,8 +1,8 @@
-1. setup distributed environment
-mkdir -p /DIST
-mkdir -p /SW
-mkdir -p /APP
+""" The myMuseum is a place to communicate with others leaving a message,
+uploading the pictures to be remembered for a while.
 
+
+Now working on describing how the image can be deployed.
 
 1. context
 It's automatically decided to myMuseum, but supposed to change it to ROOT
@@ -25,8 +25,6 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 2. Dockerize
 jar -cvf myMuseum.war ./myMuseum/*
 
-sed -i "s/WAS.SERVLET.DIR = \/SW\/was2\/lib/WAS.SERVLET.DIR = \/usr\/local\/tomcat\/lib/g" ./myMuseum/ant/build_myMuseum.properties
-sed -i "s/JAVA.HOME = \/usr\/local\/etc\/jdk1.8.0_65/JAVA.HOME = \/usr\/local\/openjdk-8/g" ./myMuseum/ant/build_myMuseum.properties
-sed -i "s/PROJECT.ROOT.WORKSPACE = \/DIST\/mymuseum/PROJECT.ROOT.WORKSPACE = \/usr\/local\/tomcat\/test/g" ./myMuseum/ant/build_myMuseum.properties
+docker build -t chambab/mymuseum -f ./dockerfile .
 
-docker build -t chambab/tomcat8-ant -f ./dockerfile_tomcat8 .
+docker run -d -it --name="mymuseum" -p 80:8080 chambab/myMuseum:latest
