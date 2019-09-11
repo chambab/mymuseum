@@ -12,6 +12,9 @@ RUN mkdir /usr/local/DIST
 WORKDIR /usr/local/DIST
 RUN git clone https://github.com/chambab/myMuseum.git
 
+WORKDIR /usr/local/DIST/myMuseum/myMuseum
+RUN ant -f ./ant/build_myMuseum.xml build
+RUN jar -cvf myMuseum.war ./*
 RUN cp ./myMuseum.war /usr/local/tomcat/webapps/
 
 EXPOSE 8080
