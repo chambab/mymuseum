@@ -4,6 +4,17 @@ uploading the pictures to be remembered for a while.
 
 Now working on describing how the image can be deployed.
 
+docker run -d -it --name=mymuseum \
+       -e PGSQL_HOST=localhost \
+       -e PGSQL_PORT=5678 \
+       -e PGSQL_DBNAME=mymuseum \
+       -e PGSQL_ID=id \
+       -e PGSQL_PW=pw \
+       chambab/mymuseum
+
+* build
+docker build --no-cache -t chambab/mymuseum:0.2 -f ./dockerfile .
+
 1. context
 It's automatically decided to myMuseum, but supposed to change it to ROOT
 'cause of being no consideration of context
