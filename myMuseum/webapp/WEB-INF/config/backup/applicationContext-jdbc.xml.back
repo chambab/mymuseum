@@ -10,7 +10,7 @@
 			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-
+		
 	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
 	<util:properties id="contextProperties" location="classpath:context.properties"/>
 
@@ -27,24 +27,24 @@
 
 	<!-- MySQL
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
-	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+	    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>	    
 	    <property name="url" value="jdbc:mysql://localhost/msmuseum?autoReconnect=true&amp;useUnicode=true"/>
 	    <property name="username" value="id"/>
 	    <property name="password" value="pw"/>
 	</bean>
 	 -->
-
+	
 	<!-- Postsql -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
-	    <property name="driverClassName" value="org.postgresql.Driver"/>
-	    <property name="url" value="jdbc:postgresql://${pgsql_host}:${pgsql_port}/${pgsql_dbname}"/>
-	    <property name="username" value="${pgsql_id}"/>
-	    <property name="password" value="${pgsql_pw}"/>
+	    <property name="driverClassName" value="org.postgresql.Driver"/>	    
+	    <property name="url" value="jdbc:postgresql://localhost:6789/mymuseum"/>
+	    <property name="username" value="id"/>
+	    <property name="password" value="pw"/>
         <property name="maxActive" value="30"/>
-        <property name="maxWait" value="1000"/>
+        <property name="maxWait" value="1000"/>	  
 	</bean>
-
-
+	 
+	
 	<!-- Oracle
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  destroy-method="close">
 	    <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
@@ -53,29 +53,29 @@
 	    <property name="username" value="id"/>
 	    <property name="password" value="pw"/>
         <property name="maxActive" value="30"/>
-        <property name="maxWait" value="1000"/>
+        <property name="maxWait" value="1000"/>	    
 	</bean>
 	 -->
-
-
-	<!--  Oracle Original Configuration
+	
+	 
+	<!--  Oracle Original Configuration 
 	<bean id="dataSource"
 		class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="java:comp/env/jdbc/chanbab"/>
 	</bean>
 	-->
 
-
+	
 	<!-- JNDI DataSource for JEE environments -->
 	<!--
 	<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/chanbab"/>
 	-->
 
 	<!-- Transaction manager for a single JDBC DataSource (alternative to JTA) -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">	
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
-
+	 
 
 	<!-- Transaction manager that delegates to JTA (for a transactional JNDI DataSource) -->
 	<!--
@@ -84,7 +84,7 @@
 	-->
 
 	<!-- Hibernate SessionFactory -->
-	<!--
+	<!-- 
     <bean id="sessionFactory"
 	    class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
@@ -93,7 +93,7 @@
 	                    <prop key="hibernate.dialect">
 	                            org.hibernate.dialect.Oracle9Dialect
 	                    </prop>
-	                    <prop key="hibernate.show_sql">true</prop>
+	                    <prop key="hibernate.show_sql">true</prop>	              
 	            </props>
 	    </property>
     </bean>
@@ -113,7 +113,7 @@
 		as beans in this context (such as the CallMonitoringAspect below).
 	-->
 	<!--AOP(Aspect Oriented Programming)-->
-
+	
 	<!-- aop:aspectj-autoproxy / -->
 
 	<!--
@@ -128,5 +128,5 @@
 	<!-- Call monitoring aspect that monitors call count and call invocation time -->
 	<!--  bean id="callMonitor" class="org.springframework.samples.petclinic.aspects.CallMonitoringAspect"/ -->
 
-
+  
 </beans>

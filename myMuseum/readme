@@ -25,6 +25,6 @@ It's automatically decided to myMuseum, but supposed to change it to ROOT
 2. Dockerize
 jar -cvf myMuseum.war ./myMuseum/*
 
-docker build -t chambab/mymuseum -f ./dockerfile .
+docker build -t chambab/mymuseum:0.1 -f ./dockerfile .
 
 docker run -d -it --name="mymuseum" -p 80:8080 chambab/myMuseum:latest
