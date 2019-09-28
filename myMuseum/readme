@@ -1,8 +1,23 @@
-""" The myMuseum is a place to communicate with others leaving a message,
+What is mymuseum
+================
+The myMuseum is a place to communicate with others leaving a message,
 uploading the pictures to be remembered for a while.
 
 
 Now working on describing how the image can be deployed.
+
+
+
+How to use myMuseum
+===================
+
+Build myMuseum
+--------------
+docker build --no-cache -t chambab/mymymuseum:latest -f ./dockerfile .
+
+Start myMuseum
+--------------
+docker run -d -it --name=mymuseum  -e PGSQL_ID=test chambab/museum:0.8
 
 docker run -d -it --name=mymuseum \
        -e PGSQL_HOST=localhost \
@@ -10,10 +25,8 @@ docker run -d -it --name=mymuseum \
        -e PGSQL_DBNAME=mymuseum \
        -e PGSQL_ID=id \
        -e PGSQL_PW=pw \
-       chambab/mymuseum
+       chambab/mymuseum:latest
 
-* build
-docker build --no-cache -t chambab/mymuseum:0.2 -f ./dockerfile .
 
 1. context
 It's automatically decided to myMuseum, but supposed to change it to ROOT
