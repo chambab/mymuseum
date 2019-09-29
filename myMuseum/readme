@@ -27,6 +27,15 @@ docker run -d -it --name=mymuseum \
        -e PGSQL_PW=pw \
        chambab/mymuseum:latest
 
+#Database Posgresql
+docker run --name mymuseumdb -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+
+#Database persistency
+docker volume create pgdata
+docker run -d -p 5432:5432 --name pgsql -it --rm -v pgdata:/var/lib/postgresql/data postgres
+
+docker exec -it pgsql bash
+psql -U postgres
 
 1. context
 It's automatically decided to myMuseum, but supposed to change it to ROOT
