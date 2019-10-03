@@ -30,6 +30,7 @@ RUN cp -R ./myMuseum/webapp/* /usr/local/tomcat/webapps/ROOT/
 
 
 COPY mymuseum-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/mymuseum-entrypoint.sh 
 #RUN ln -s usr/local/bin/docker-entrypoint.sh /
 ENTRYPOINT ["/usr/local/bin/mymuseum-entrypoint.sh"]
 

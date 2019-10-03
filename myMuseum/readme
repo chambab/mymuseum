@@ -17,25 +17,37 @@ docker build --no-cache -t chambab/mymymuseum:latest -f ./dockerfile .
 
 Start myMuseum
 --------------
+# Simple
 docker run -d -it --name=mymuseum  -e PGSQL_ID=test chambab/museum:0.8
 
+# Full
 docker run -d -it --name=mymuseum \
        -e PGSQL_HOST=localhost \
        -e PGSQL_PORT=5678 \
        -e PGSQL_DBNAME=mymuseum \
-       -e PGSQL_ID=id \
-       -e PGSQL_PW=pw \
+       -e PGSQL_ID=userid \
+       -e PGSQL_PW=password \
        chambab/mymuseum:latest
 
-#Database Posgresql
-docker run --name mymuseumdb -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+# Database Posgresql
+docker run --name mymuseumdb \
+       -e POSTGRES_USER=userid \
+       -e POSTGRES_PASSWORD=password \
+       -e POSTGRES_DB=mymuseum -d postgres
 
-#Database persistency
+> psql -U chanbab -W mymuseum
+> password
+
+# Database persistency
 docker volume create pgdata
 docker run -d -p 5432:5432 --name pgsql -it --rm -v pgdata:/var/lib/postgresql/data postgres
 
 docker exec -it pgsql bash
 psql -U postgres
+
+# Clean docker cache image
+docker system prune --volumes
+
 
 1. context
 It's automatically decided to myMuseum, but supposed to change it to ROOT
