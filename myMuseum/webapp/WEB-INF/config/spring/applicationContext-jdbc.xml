@@ -19,6 +19,7 @@
 	<!-- context:property-placeholder location="classpath:jdbc.properties"/ -->
 	<context:property-placeholder location="classpath:context.properties"/>
 
+
 	<!--
 		Uses Apache Commons DBCP for connection pooling. See Commons DBCP documentation
 		for the required JAR files. Alternatively you can use another connection pool
