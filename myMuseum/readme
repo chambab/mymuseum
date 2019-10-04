@@ -23,17 +23,18 @@ docker run -d -it --name=mymuseum  -e PGSQL_ID=test chambab/museum:0.8
 # Full
 docker run -d -it --name=mymuseum \
        -e PGSQL_HOST=localhost \
-       -e PGSQL_PORT=5678 \
+       -e PGSQL_PORT=5432 \
        -e PGSQL_DBNAME=mymuseum \
        -e PGSQL_ID=userid \
        -e PGSQL_PW=password \
+       -p 18081:8080 \
        chambab/mymuseum:latest
 
 # Database Posgresql
 docker run --name mymuseumdb \
        -e POSTGRES_USER=userid \
        -e POSTGRES_PASSWORD=password \
-       -e POSTGRES_DB=mymuseum -d postgres
+       -e POSTGRES_DB=mymuseum -d -p 5432:5432 postgres
 
 > psql -U chanbab -W mymuseum
 > password

@@ -17,6 +17,7 @@
 	<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
 	<!-- (in this case, JDBC-related settings for the dataSource definition below) -->
 	<!-- context:property-placeholder location="classpath:jdbc.properties"/ -->
+	<context:property-placeholder location="classpath:context.properties"/>
 
 	<!--
 		Uses Apache Commons DBCP for connection pooling. See Commons DBCP documentation
